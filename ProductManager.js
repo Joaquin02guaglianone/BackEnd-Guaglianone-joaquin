@@ -1,4 +1,5 @@
-const fsProds = require("fs")
+const fsProds = require("fs");
+const path = require("path");
 
 class Product {
 
@@ -16,15 +17,19 @@ class Product {
       this.code = code;
       this.stock = stock
       this.Prods = [];
-      this.id = 1; 
-      this.path = "" ;
+      this.id = 1;
+      this.path = path
+
    }
+
 
    addProducts(title, description, price, thumbnail, code, stock) {
       if (title && description && price && thumbnail && code && stock) {
 
-   let codexist = this.Prods.some((product)=> {return product.code === code})
-          if ( codexist !== true ) {
+         let codexist = this.Prods.some((product) => {
+            return product.code === code
+         })
+         if (codexist !== true) {
             let id = this.id++
             let NewProds = {
                id,
@@ -35,87 +40,106 @@ class Product {
                code,
                stock
             }
-            this.Prods.push( NewProds )
+            this.Prods.push(NewProds)
 
-          } else {
-             console.error("error el code establecido ya existe")
-          }
-   
+         } else {
+            return console.error("error el code establecido ya existe")
+         }
+
       } else {
-   
-         console.error("error por favor complete todos los campos para agregar un producto")
-   
+
+         return console.error("error por favor complete todos los campos para agregar un producto")
+
       }
 
    }
 
-   getProducts(){
+   getProducts() {
       return (
 
          //  console.log (this.Prods),
 
-           this.Prods)
-     
+         this.Prods)
+
    }
 
    getProductsByID(id) {
 
-      const idExist = this.Prods.find((productid)=>{return productid.id === id})
+      const idExist = this.Prods.find((productid) => {
+         return productid.id === id
+      })
 
       if (idExist) {
 
-         return console.log("se a encontrado el id:", idExist)
+         return ("se a encontrado el id:", idExist)
 
       } else {
 
-         console.error("no se ha podido encontrar el producto solicitado con id")
+         return console.error("no se ha podido encontrar el producto solicitado con id")
 
       }
 
    }
-   
+
    deleteProduct(id) {
 
-      const indice = this.Prods.findIndex((prodid)=>{return prodid.id === id})
+      const indice = this.Prods.findIndex((prodid) => {
+         return prodid.id === id
+      })
 
       const borrarProd = this.Prods.splice(indice, 1)
 
-      if(indice >= 0 ) {
+      console.log(indice)
+      console.log(borrarProd)
 
-         return (console.log("se ha borrado el producto:", borrarProd))
+      if (indice >= 0) {
+
+         return (("se ha borrado el producto:", borrarProd))
 
       } else {
 
-          return console.log("no se ha podido borrar porque no se encontrado el id")
+         return console.error("no se ha podido borrar porque no se encontrado el id")
 
       }
-  }
-
-  updateProduct(id, newproduct) {
-
-   const idproducts = this.Prods.findIndex(idproduct => idproduct.id === id)
-
-   if (idproducts >= 0 ) {
-
-       console.error("Product not found");
-
-       return;
    }
-   const productUpdated = {
 
-       ...this.Prods[idproducts],
+   updateProduct(id, newproduct) {
 
-       ...newproduct
+      const idproducts = this.Prods.findIndex(idproduct => idproduct.id === id)
 
-   };
-   this.Prods[idproducts] = productUpdated;
+      if (idproducts <= 0) {
 
-   console.log("Producto actualizado");
+         console.error("Product not found");
+
+         return;
+
+      }
+      const productUpdated = {
+
+         ...this.Prods[idproducts],
+
+         ...newproduct
+
+      };
+      this.Prods[idproducts] = productUpdated;
+   }
+
+   archivarProds(path) {
+
+      const ArchivoDeP = this.Prods
+
+      fsProds.writeFileSync(path, `${JSON.stringify(ArchivoDeP)}`, (error) => {
+         if (error) return console.log(error);
+         fsProds.readFile(path, "utf-8", (error, resultado) => {
+            if (error) return console.log(error);
+            console.log(resultado)
+         })
+      })
+   }
 }
 
-}
 
-const ProductManager = new Product ()
+const ProductManager = new Product()
 
 ProductManager.addProducts("uncharted 1", "disco fisico", "$16000", "imagen del uncharted 1", 1, "2000")
 
@@ -131,14 +155,23 @@ ProductManager.addProducts("uncharted collection", "disco fisico", "$17000", "im
 
 ProductManager.addProducts("watch dogs 2", "disco fisico", "$16000", "imagen del watch dogs 2", 7, "3500")
 
-ProductManager.getProductsByID(1)
+// ProductManager.getProductsByID(5)
 
-ProductManager.deleteProduct(1)
+// ProductManager.deleteProduct(3)
 
-ProductManager.getProducts()
+// ProductManager.getProducts()
 
-// ProductManager.updateProduct(6, { title: "code vein", description: "disco fisico", price: "$13000", thumbnail: "imagen del code vein", cod: "7", stock: "2900" })
 // console.log(ProductManager.getProducts())
 
-//node script.js
+ProductManager.updateProduct(7, {
+   title: "code vein",
+   description: "disco fisico",
+   price: "$13000",
+   thumbnail: "imagen del code vein",
+   cod: "7",
+   stock: "2900"
+})
 
+ProductManager.archivarProds("./productos.json")
+
+//node script.js
