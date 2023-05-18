@@ -28,6 +28,7 @@ class Product {
                stock
             }
             this.Prods.push(NewProds)
+            this.archivarProds()
 
          } else {
             return ("error el code establecido ya existe")
@@ -42,10 +43,7 @@ class Product {
    }
 
    getProducts() {
-      return (
-
-         this.Prods)
-
+      return (this.Prods)
    }
 
    getProductsByID(id) {
@@ -76,7 +74,7 @@ class Product {
 
       if (indice >= 0) {
 
-         return (("se ha borrado el producto:", borrarProd))
+         return (("se ha borrado el producto:", borrarProd), this.archivarProds())
 
       } else {
 
@@ -102,6 +100,7 @@ class Product {
 
       };
       this.Prods[idproducts] = productUpdated;
+      this.archivarProds()
    }
 
    archivarProds() {
@@ -138,7 +137,7 @@ ProductManager.addProducts("uncharted lost legacy", "disco fisico", "$15000", "i
 
 ProductManager.addProducts("uncharted collection", "disco fisico", "$17000", "imagen de la uncharted collection", 6, "500")
 
-ProductManager.addProducts("watch dogs 2", "disco fisico", "$16000", "imagen del watch dogs 2", 7, "3500")
+ProductManager.addProducts("watch dogs 1", "disco fisico", "$16000", "imagen del watch dogs 2", 7, "3500")
 
 // ProductManager.getProductsByID(5)
 
@@ -157,6 +156,5 @@ ProductManager.updateProduct(7, {
    stock: "2900"
 })
 
-ProductManager.archivarProds()
 
 //node script.js
