@@ -16,6 +16,11 @@
   "bugs": {
     "url": "https://github.com/Joaquin02guaglianone/BackEnd-Guaglianone-joaquin/issues"
   },
+  "nodemonConfig":{
+    "ignore":[
+    "*.json"
+    ]
+    },
   "homepage": "https://github.com/Joaquin02guaglianone/BackEnd-Guaglianone-joaquin#readme",
   "description": "",
   "dependencies": {

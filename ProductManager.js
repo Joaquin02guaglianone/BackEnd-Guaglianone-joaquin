@@ -70,9 +70,9 @@ class Product {
          return prodid.id === id
       })
 
-      const borrarProd = this.Prods.splice(indice, 1)
-
       if (indice >= 0) {
+
+         const borrarProd = this.Prods.splice(indice, 1)
 
          return (("se ha borrado el producto:", borrarProd), this.archivarProds())
 
@@ -82,6 +82,8 @@ class Product {
 
       }
    }
+
+
 
    updateProduct(id, newproduct) {
 
@@ -141,7 +143,7 @@ ProductManager.addProducts("watch dogs 1", "disco fisico", "$16000", "imagen del
 
 // ProductManager.getProductsByID(5)
 
-// ProductManager.deleteProduct(3)
+//  ProductManager.deleteProduct(5)
 
  ProductManager.getProducts()
 
