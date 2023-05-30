@@ -47,7 +47,7 @@ export class CartManager {
                 };
             }
         });
-    
+        
         if (!found) {
             const newProd = {
                 product: prodID,
@@ -55,7 +55,7 @@ export class CartManager {
             };
             cart.push(newProd);
         }
-    
+        this.updateProductInCart(prodID);
         return true;
     }
     
@@ -70,6 +70,24 @@ export class CartManager {
      }
    });
     }
+
+    updateProductInCart(prodID) {
+        const cartToUpdate = this.cart.find(cart => cart.products.some(prod => prod.product === prodID));
+            if (cartToUpdate) {
+                const updatedCart = cartToUpdate.products.map(prod => {
+                    if (prod.product === prodID) {
+                        return {
+                            ...prod,
+                            quantity: prod.quantity 
+                        };
+                    }
+                    return prod;
+                });
+                cartToUpdate.products = updatedCart;
+                return this.archivarCart();
+            }
+            return Promise.reject("Cart not found");
+      }
 
 }
 
