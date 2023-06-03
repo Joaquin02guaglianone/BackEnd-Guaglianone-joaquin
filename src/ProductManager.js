@@ -1,3 +1,4 @@
+import { error, timeLog } from "console";
 import fsProds from "fs";
 const path = './productos.json';
 
@@ -7,6 +8,7 @@ export class Product {
     this.Prods = [];
     this.id = 1;
     this.path = path;
+    this.loadProducts()
   }
 
   addProducts(title, description, price, thumbnail, code, stock, category) {
@@ -16,30 +18,23 @@ export class Product {
       let codexist = this.Prods.some((product) => {
         return product.code === code;
       });
-      if (codexist !== true) {
-        let id = this.id++;
-        let status = true
-        let NewProds = {
-          id,
-          title,
-          description,
-          price,
-          thumbnail,
-          code,
-          stock,
-          category,
-          status
-        };
-        this.Prods.push(NewProds);
-
-        this.archivarProds();
+      if (codexist){
+        throw new error("el codigo esta repetido")
       } else {
-
-        return "error el code establecido ya existe";
+        let id = this.id++;
+        const newProd= {
+          id,
+          title: String(title),
+          price: Number(price),
+          thumbnail: String(thumbnail),
+          code: String(code),
+          stock: String(stock),
+          category: Array(category)
+        }
+        this.Prods.push(newProd)
       }
     } else {
-
-      return "error por favor complete todos los campos para agregar un producto";
+      throw new Error("debe completar todas los campos");
     }
   }
 
@@ -95,18 +90,26 @@ export class Product {
 
   archivarProds() {
    const jsonData = JSON.stringify(this.Prods);
-   console.log(this.path);
-   fsProds.writeFile(this.path, jsonData, "utf-8", (error) => {
-     if (error) {
-       console.log(error);
-     } else {
-       console.log("Datos archivados correctamente");
-     }
-   });
+   fsProds.writeFile(this.path, jsonData, "utf-8", (error=> {
+    if (error) {
+      throw new Error("los productos no se han podido cargar correctamente" + error)
+    } else {
+      return "se han podido cargar los datos de forma correcta"
+    }
+   }))
  } 
-};
+  
+ loadProducts() {
+  if (fsProds.existsSync(this.path)) {
+    const jsonProducts = fsProds.readFileSync(this.path, "utf-8")
+    this.Prods = JSON.parse(jsonProducts);
+  } else {
+    this.archivarProds();
+  }
+}
 
-const pmanager = new Product(path);
+}
+
 
 // ProductManager.addProducts(
 //   "uncharted 1",
