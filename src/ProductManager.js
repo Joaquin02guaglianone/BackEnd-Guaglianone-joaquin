@@ -1,7 +1,6 @@
-import { error, timeLog } from "console";
+import { error } from "console";
 import fsProds from "fs";
 const path = './productos.json';
-
 
 export class Product {
   constructor(path) {

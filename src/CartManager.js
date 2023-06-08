@@ -92,10 +92,10 @@ export class CartManager {
 
       loadCart() {
         if (fsCart.existsSync(this.path)) {
-            const jsonCarrito = fsCart.readFileSync(this.path, "utf-8");
-            this.cart = JSON.parse(jsonCarrito);
+           let jsonCart = fsCart.readFileSync(this.path, "utf-8" )
+          //  this.cart = JSON.parse(jsonCart)
         } else {
-            this.archivarCart()
+           this.archivarCart
         }
       }
 }
