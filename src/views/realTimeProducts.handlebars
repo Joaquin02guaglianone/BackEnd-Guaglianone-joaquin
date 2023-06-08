@@ -3,14 +3,8 @@
 
 <h2>{{juegos}}</h2>
 
-<div>
-  <ul>{{#each prods}}
-    <li>  
-  {{this.title}}
-  {{this.price}}
-  {{this.category}}
-    </li>
-  </ul> {{/each}}
+<div id="product-list">
+  
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

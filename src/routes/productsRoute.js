@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Product } from "../ProductManager.js";
-import { ioEmitServer } from "../app.js";
+import { socketServer } from "../app.js";
 
 export const proRoute = Router();
 const productManager = new Product("../productos.json");
@@ -54,8 +54,8 @@ if(!title, !description, !price, !thumbnail, !code, !stock, !category){
     category
   );
 
-  const productACt = productManager.getProducts()
-  ioEmitServer.emit("actProducts", productACt)
+  const productAct = productManager.getProducts()
+  socketServer.emit("productAct", productAct)
 
   productManager.archivarProds();
   return res.status(200).send("productos añadidos");
@@ -68,8 +68,8 @@ proRoute.put("/:pid", (req, res) => {
   const updProduct = req.body;
   productManager.updateProduct(prodId, updProduct);
 
-  const productACt = productManager.getProducts()
-  ioEmitServer.emit("actProducts", productACt)
+  const productAct = productManager.getProducts()
+  socketServer.emit("productAct", productAct)
 
   res.send("producto modificado correctamente")
   } catch (error) {
@@ -82,8 +82,8 @@ proRoute.delete("/:pid", (req, res) => {
   const delProdId = parseInt(req.params.pid)
   const delProd = productManager.deleteProduct(delProdId)
 
-  const productACt = productManager.getProducts()
-  ioEmitServer.emit("actProducts", productACt)
+  const productAct = productManager.getProducts()
+  socketServer.emit("productAct", productAct)
 
   if (!delProd) {
     res.send("se ha borrado el producto")

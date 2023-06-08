@@ -1,6 +1,14 @@
 const socket = io();
 
+let $productlist = document.getElementById("product-list")
 
-socket.emit('message', 'Hola, me estoy comunicando desde un websocket')
-socket.on('anotherMessage', data =>console.log(data))
-socket.on('anotherMessageButNotForEveryone', data => console.log(data));
+socket.on(`productAct`, (products) => {
+    $productlist.innerHTML = "";
+    products.forEach((product)=> {
+        const title = product.title
+        const pElement = document.createElement("p")
+        pElement.textContent = title;
+        $productlist.appendChild(pElement) 
+    })
+})
+
