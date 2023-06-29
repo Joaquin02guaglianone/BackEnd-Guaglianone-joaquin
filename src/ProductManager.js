@@ -8,6 +8,7 @@ export class Product {
     this.id = 1;
     this.path = path;
     this.loadProducts()
+    this.status = true
   }
 
   addProducts(title, description, price, thumbnail, code, stock, category) {
@@ -20,6 +21,7 @@ export class Product {
       if (codexist){
         throw new error("el codigo esta repetido")
       } else {
+        let status = this.status
         let id = this.id++;
         const newProd= {
           id,
@@ -28,7 +30,8 @@ export class Product {
           thumbnail: String(thumbnail),
           code: String(code),
           stock: String(stock),
-          category: Array(category)
+          category: Array(category),
+          status
         }
         this.Prods.push(newProd)
       }
@@ -57,8 +60,6 @@ export class Product {
     const indice = this.Prods.findIndex((prodid) => {
       return prodid.id === id;
     });
-    console.log(this.Prods)
-    console.log(indice)
 
     if (indice >= 0) {
       const borrarProd = this.Prods.splice(indice, 1);
@@ -71,8 +72,6 @@ export class Product {
 
   updateProduct(id, newproduct) {
     const idproducts = this.Prods.findIndex((idproduct) => idproduct.id === id);
-    
-    console.log(idproducts)
 
     if (idproducts <= 0) {
       return "Product not found";

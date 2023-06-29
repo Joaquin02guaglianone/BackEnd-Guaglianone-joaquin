@@ -1,0 +1,18 @@
+
+  <title>Messages</title>
+
+  <h1>Messages with postman</h1>
+
+  {{#each messages}}
+  <ul>
+    <li>{{this.user}}</li>
+    <li>{{this.message}}</li>
+    <hr>
+  </ul>
+{{/each}}
+
+  <ul>
+
+  </ul>
+  <script src="/socket.io/socket.io.js"></script>
+<script src="/js/messages.js"></script>
