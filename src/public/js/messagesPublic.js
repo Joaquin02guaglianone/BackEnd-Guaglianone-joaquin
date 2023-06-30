@@ -1,11 +1,17 @@
 const socket = io();
-const $newMessage = document.getElementById("allMessages");
 
-socket.on('allMessages', message => {
-  const messages = document.createElement('li');
-  const messagespace = document.createElement('hr');
-  messages.textContent = message;
+let $messagelist = document.getElementById("message-list")
 
-  $newMessage.appendChild(messages);
-  $newMessage.appendChild(messagespace);
-});
+socket.on(`getmessage`, (message) => {
+    $messagelist.innerHTML = "";
+    message.forEach((msm)=> {
+        const user = msm.user
+        const messages = msm.message
+        const uElement = document.createElement("p")
+        const mElement = document.createElement("p")
+        uElement.textContent = user;
+        mElement.textContent = messages;
+        $messagelist.appendChild(uElement)
+        $messagelist.appendChild(mElement) 
+    })
+})

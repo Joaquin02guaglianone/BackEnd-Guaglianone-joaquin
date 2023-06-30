@@ -1,28 +1,37 @@
 import { Router } from "express";
-import { messageManager } from "../dao/ManagersDao/messagesManagerDao.js"; 
+import MessageManagerMdb from "../dao/ManagersDao/messagesManagerDao.js";
 import { socketServer } from "../app.js";
 
 export const messagesRoute = Router();
 
-const messageDao = new messageManager();
+const msManager = new MessageManagerMdb()
 
-messagesRoute.get("/", async (req,res)=> {
+messagesRoute.get("/", async (req, res) => {
     try {
-        const allMessages = messageDao.getMessages();
-        res.send(allMessages)
+        const getMessages = await msManager.getMessage()
+
+        if(getMessages) {
+            res.status(200).send(getMessages)
+        }else{
+            res.status(404).send("Not messages")
+        }
     } catch (error) {
-        res.status(400).send("ocurrio un error y no se pudieron encontrar los mensajes")
+        res.status(500).send("Internal server error");
     }
 })
 
-messagesRoute.post("/", async (req,res) => {
- try {
-    const { user, message } = req.body;
-    const newMessage = await messageManager.addMessage(user, message);
-    socketServer.emit("allMessages", message)
-    res.send(newMessage)
- } catch (error) {
-    res.status(400).send("ocurrio un error y no se pudo crear el mensaje")
- }
+messagesRoute.post("/", async (req, res) => {
+    try {
+        let algo = "mensaje agregado"
+        const { user, message } = req.body
+        const addMessage = await msManager.addNewMessage(user, message)
+        socketServer.emit('getMessage', message)
+        if(addMessage) {
+            res.status(200).send("Message added")
+        }else{
+            res.status(404).send("The message could not be added")
+        }
+    } catch (error) {
+        res.status(500).send("Internal server error");
+    }
 })
-

@@ -1,18 +1,25 @@
-
+<!DOCTYPE html>
+<html>
+<head>
   <title>Messages</title>
-
+</head>
+<body>
   <h1>Messages with postman</h1>
 
   {{#each messages}}
-  <ul>
+  <ul style="background-color: brown; 
+  padding: 10px; color: white;">
     <li>{{this.user}}</li>
     <li>{{this.message}}</li>
     <hr>
   </ul>
 {{/each}}
 
-  <ul>
+  <ul style="background-color: brown; 
+  padding: 10px; margin-bottom: 10px; color: white;" id="newMessage">
 
   </ul>
   <script src="/socket.io/socket.io.js"></script>
 <script src="/js/messages.js"></script>
+</body>
+</html>

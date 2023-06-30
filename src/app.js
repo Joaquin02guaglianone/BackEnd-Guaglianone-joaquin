@@ -28,7 +28,7 @@ app.use(express.static(__dirname + '/public'));
 app.use("/", routerProductsView)
 app.use("/api/products", proRoute);
 app.use("/api/cart", cartRoute)
-app.use("/api/menssages", messagesRoute)
+app.use("/api/messages", messagesRoute)
 
 socketServer.on("connection", (socket) => {
     console.log("Usuario conectado", socket.id);

@@ -7,7 +7,6 @@ const cartDao = new CartManagerDao();
 
 cartRoute.post("/", async (req,res) => {
 let crearCart = await cartDao.addcart();
-
 if (crearCart) {
   return res.send("se creo el carrito");
 }else {
@@ -45,7 +44,7 @@ cartRoute.post("/:cid/product/:pid", async (req,res) => {
   const cID = (req.params.cid);
   const pID = (req.params.pid);
 
-  const agregarAlCart = cartDao.addProductsCart(cID, pID)
+  const agregarAlCart = cartDao.addProductsToCart(cID, pID)
 
   if (agregarAlCart) {
     res.send("se ha añanido el producto")

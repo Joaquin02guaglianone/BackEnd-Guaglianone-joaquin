@@ -1,28 +1,25 @@
 import messageModel from "../models/messages.js";
 
-class messageManager {
-    constructor() {
-        this.messageModel = messageModel;
+export default class MessageManagerMdb {
+  constructor() {
+    this.messageModel = messageModel;
+  }
+
+  async addNewMessage(user, message) {
+    try {
+      const msg = await this.messageModel.create({ user: user, message: message }); 
+      return msg;
+    } catch (error) {
+      throw new Error("Could not add message");
     }
+  }
 
-    async getMessages() {
-        try {
-          const messages = await this.messageModel.find();
-          return messages;
-        } catch (error) {
-          throw new Error("no se pudo encontrar el mensaje");
-        }
-      }
-
-      async addMessage(user, message) {
-        try {
-          const newMessage = await this.messageModel.create({ user, message });
-          return newMessage;
-        } catch (error) {
-          throw new Error("no se pudo crear el mensaje");
-        }
-      }
-
+  async getMessage() {
+    try {
+      const messages = await this.messageModel.find();
+      return messages;
+    } catch (error) {
+      throw new Error("Could not get messages");
+    }
+  }
 }
-
-export {messageManager}; 
