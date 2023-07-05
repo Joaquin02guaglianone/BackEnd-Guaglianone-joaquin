@@ -10,22 +10,9 @@ const productsDao = new productManagerDao();
 
 proRoute.get("/", async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit)
-    const page = parseInt(req.query.page)
-    const sort = (req.query.sort)
-    const query = (req.query.query)
-
     let productsmgd = await productsDao.getProducts(limit, page, sort, query);
-
-  //  let productsJSON = productsmgd.docs.map(p=> p.toJSON())
-
-  //  const context = {
-  //   productos : productsmgd,
-  //   productsDocs : productsJSON
-  //  };
     // const productAct = productsDao.getProducts()
-    // socketServer.emit("productAct", productAct);
-       
+    // socketServer.emit("productAct", productAct);   
       res.send(productsmgd)
   } catch {
     console.log(error);
@@ -34,17 +21,22 @@ proRoute.get("/", async (req, res) => {
 });
 
 proRoute.get("/:pid", async (req, res) => {
-  const productmgdID = (req.params.pid);
-  const productmgd = await productsDao.getProductsById(productmgdID);
-
-  // const productAct = productsDao.getProducts()
-  // socketServer.emit("productAct", productAct);
-
-  if (productmgd) {
-    res.send(JSON.stringify(productmgd));
-  } else {
-    res.status(500).send("no se pudo encontrar el producto solicitado");
+  try {
+    const productmgdID = (req.params.pid);
+    const productmgd = await productsDao.getProductsById(productmgdID);
+  
+    // const productAct = productsDao.getProducts()
+    // socketServer.emit("productAct", productAct);
+  
+    if (productmgd) {
+      res.send(productmgd);
+    } else {
+      res.status(500).send("no se pudo encontrar el producto solicitado");
+    }
+  } catch (error) {
+    throw new Error ("ocurrio un error en el server")
   }
+
 });
 
 proRoute.post("/", async (req, res) => {
@@ -72,7 +64,7 @@ try {
 
 proRoute.put("/:pid", async (req, res) => {
   try {
-    const prodMgdID = parseInt(req.params.pid);
+    const prodMgdID = (req.params.pid);
     const updatedProdMgd = req.body;
     const updatedProductMgd = await productsDao.updateProduct(
       prodMgdID,
@@ -91,17 +83,22 @@ proRoute.put("/:pid", async (req, res) => {
 });
 
 proRoute.delete("/:pid", async (req, res) => {
-  const delProdMgdID = parseInt(req.params.pid);
-  const delproductMgd = await productsDao.deleteProduct(delProdMgdID);
-
-  // const productAct = productsDao.getProducts();
-  // socketServer.emit("productAct", productAct);
-
-  if (!delproductMgd) {
-    res.send("se ha borrado el producto");
-  } else {
-    res.status(400).send("no se ha encontrado el producto que desea borrar");
+  try {
+    const delProdMgdID = (req.params.pid);
+    const delproductMgd = await productsDao.deleteProduct(delProdMgdID);
+  
+    // const productAct = productsDao.getProducts();
+    // socketServer.emit("productAct", productAct);
+  
+    if (!delproductMgd) {
+      res.send("se ha borrado el producto");
+    } else {
+      res.status(400).send("no se ha encontrado el producto que desea borrar");
+    }
+  } catch (error) {
+    throw new Error ("ocurrio un error en el server")
   }
+
 });
 
 //fileSystem

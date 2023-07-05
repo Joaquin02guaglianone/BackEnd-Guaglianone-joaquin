@@ -6,22 +6,31 @@ export const cartRoute = Router();
 const cartDao = new CartManagerDao();
 
 cartRoute.post("/", async (req,res) => {
-let crearCart = await cartDao.addcart();
+  try {
+    let crearCart = await cartDao.addcart();
 if (crearCart) {
   return res.send("se creo el carrito");
 }else {
   return res.status(400).send("ocurrio un error en la creacion de carrito")
 }
+  } catch (error) {
+    throw new Error ("ocurrio un error en el server")
+  }
+
 
 })
 
 cartRoute.get("/", async (req,res) => {
-  const cartMgd = await cartDao.getCart()
+  try {
+    const cartMgd = await cartDao.getCart()
 
-  if(cartMgd) {
-    return res.send(cartMgd)
-  }else {
-    return res.status(400).send("no se ha podido encontrar los carritos")
+    if(cartMgd) {
+      return res.send(cartMgd)
+    }else {
+      return res.status(400).send("no se ha podido encontrar los carritos")
+    }
+  } catch (error) {
+    throw new Error ("ocurrio un error en el server")
   }
 
 })
@@ -63,43 +72,56 @@ cartRoute.put("/:cid", async (req,res) => {
 })
 
 cartRoute.post("/:cid/product/:pid", async (req,res) => {
-  const cID = (req.params.cid);
-  const pID = (req.params.pid);
-
-  const agregarAlCart = cartDao.addProductsToCart(cID, pID)
-
-  if (agregarAlCart) {
-    res.send("se ha añanido el producto")
-  } else {
-    res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+  try {
+    const cID = (req.params.cid);
+    const pID = (req.params.pid);
+  
+    const agregarAlCart = cartDao.addProductsToCart(cID, pID)
+  
+    if (agregarAlCart) {
+      res.send("se ha añanido el producto")
+    } else {
+      res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+    }
+  } catch (error) {
+    throw new Error ("ocurrio un error en el server")
   }
 
 })
 
 cartRoute.delete("/:cid/product/:pid", async (req,res) => {
-  const cID = (req.params.cid);
-  const pID = (req.params.pid);
-
-  const deleteFromCart = cartDao.deleteProductsfromCart(cID, pID)
-
-  if (deleteFromCart) {
-    res.send("se ha añanido el producto")
-  } else {
-    res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+  try {
+    const cID = (req.params.cid);
+    const pID = (req.params.pid);
+  
+    const deleteFromCart = cartDao.deleteProductsfromCart(cID, pID)
+  
+    if (deleteFromCart) {
+      res.send("se ha añanido el producto")
+    } else {
+      res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+    }
+  } catch (error) {
+    throw new Error("ocurrio un error")
   }
+
 
 })
 
 cartRoute.put("/:cid/product/:pid", async (req,res) => {
-  const cID = (req.params.cid);
-  const pID = (req.params.pid);
-
-  const changeCart = cartDao.actProductsToCart(cID, pID)
-
-  if (changeCart) {
-    res.send("se ha añanido el producto")
-  } else {
-    res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+  try {
+    const cID = (req.params.cid);
+    const pID = (req.params.pid);
+  
+    const changeCart = cartDao.actProductsToCart(cID, pID)
+  
+    if (changeCart) {
+      res.send("se ha añanido el producto")
+    } else {
+      res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+    }
+  } catch (error) {
+    throw new Error ("ocurrio un error en el server")
   }
 
 })

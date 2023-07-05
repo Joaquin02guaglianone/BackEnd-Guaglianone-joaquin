@@ -16,11 +16,16 @@ class CartManagerDao {
   }
 
   async getCartId(id) {
-    const cartId = await this.cartModel.findById(id);
-    if (!cartId) {
-      return "No se encontro el carrito";
+    try {
+      const cartId = await this.cartModel.findById(id);
+      if (!cartId) {
+        return "No se encontro el carrito";
+      }
+      return cartId.products;
+    } catch (error) {
+      throw new Error ("ocurrio un error en la pagina")
     }
-    return cartId.products;
+
   }
 
   async getCart() {

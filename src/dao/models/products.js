@@ -10,6 +10,10 @@ const prodSchema = new mongoose.Schema({
     required: true
    },
 
+   description : {
+    type: String
+   },
+
    price : {
     type: Number,
     required: true,
@@ -17,8 +21,9 @@ const prodSchema = new mongoose.Schema({
    },
 
    thumbnail : {
-    type: String,
-    required: true
+    type: Array,
+    required: true,
+    default: []
    },
 
    code : {

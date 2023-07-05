@@ -41,7 +41,7 @@ class productManagerDao {
     }
   }
 
-  async updateProduct(obj, pid) {
+  async updateProduct(pid, obj) {
     try {
         const updateProduct = await this.productModel.updateOne({_id: pid}, obj)
         return updateProduct;
