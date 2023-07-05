@@ -1,0 +1,40 @@
+<body style="background-color: rgb(41, 41, 41); color:blanchedalmond">
+
+<h1 style="text-align: center;">{{title}}</h1>
+
+<h2>{{games}}</h2>
+
+<div>
+  <div>{{#each AllProducts}}
+{{this.title}}
+{{this.price}}
+{{this.category}}
+<br>
+<button><a href="/products/{{this._id}}">detalles del producto</a></button>
+<button>Agregar al carrito</button>
+<br>
+  </div>{{/each}}
+</div>
+
+<br>
+<br>
+<br>
+
+<div style="text-align:center;">
+  {{#if productPaginate.hasPrevPage }}
+  <a href="/products?page={{productPaginate.prevPage}}">Página anterior</a>
+  {{/if}}
+    <span>Página actual: {{productPaginate.page}}</span>
+  {{#if productPaginate.hasNextPage }}
+  <a href="/products?page={{productPaginate.nextPage}}">Página siguiente</a>
+  {{/if}} 
+  <br>
+    <span>Total de páginas: {{productPaginate.totalPages}}</span>
+</div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+
+</body>

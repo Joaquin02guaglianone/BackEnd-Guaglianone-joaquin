@@ -10,7 +10,7 @@ class productManagerDao {
       const newProduct = await this.productModel.create(producto);
       return newProduct;
     } catch {
-      throw new error("hubo un fallo al agregar el producto");
+      throw new Error("hubo un fallo al agregar el producto");
     }
   }
 
@@ -50,9 +50,14 @@ class productManagerDao {
     }
   }
 
-  async getProducts(limit = null) {
+  async getProducts(limit, page, sort, query) {
     try {
-      let products = await this.productModel.find();
+      let products = await this.productModel.paginate(
+        {query}, {
+        limit: limit || 6,
+        page : page || 1,
+        sort: sort === "asc" ? {price : 1} : sort === "desc" ? {price: -1} : undefined
+      });
       return products;
     } catch (error) {
       throw new Error("hubo un error al pedir los productos");
@@ -61,3 +66,6 @@ class productManagerDao {
 }
 
 export {productManagerDao}
+
+
+

@@ -7,16 +7,14 @@
   <h1>Messages with postman</h1>
 
   {{#each messages}}
-  <ul style="background-color: brown; 
-  padding: 10px; color: white;">
+  <ul>
     <li>{{this.user}}</li>
     <li>{{this.message}}</li>
     <hr>
   </ul>
 {{/each}}
 
-  <ul style="background-color: brown; 
-  padding: 10px; margin-bottom: 10px; color: white;" id="newMessage">
+  <ul>
 
   </ul>
   <script src="/socket.io/socket.io.js"></script>

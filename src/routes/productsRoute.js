@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Product } from "../ProductManager.js";
 import { productManagerDao } from "../dao/ManagersDao/productManagerDao.js";
 import { socketServer } from "../app.js";
+import productModel from "../dao/models/products.js";
 
 export const proRoute = Router();
 
@@ -9,16 +10,23 @@ const productsDao = new productManagerDao();
 
 proRoute.get("/", async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit);
-    let productsmgd = await productsDao.getProducts();
-    if (!isNaN(limit)) {
-      productsmgd = productsmgd.slice(0, limit);
-    }
+    const limit = parseInt(req.query.limit)
+    const page = parseInt(req.query.page)
+    const sort = (req.query.sort)
+    const query = (req.query.query)
 
-    const productAct = productsDao.getProducts()
-    socketServer.emit("productAct", productAct);
+    let productsmgd = await productsDao.getProducts(limit, page, sort, query);
 
-    res.send(JSON.stringify(productsmgd));
+  //  let productsJSON = productsmgd.docs.map(p=> p.toJSON())
+
+  //  const context = {
+  //   productos : productsmgd,
+  //   productsDocs : productsJSON
+  //  };
+    // const productAct = productsDao.getProducts()
+    // socketServer.emit("productAct", productAct);
+       
+      res.send(productsmgd)
   } catch {
     console.log(error);
     res.status(500).send("error en el servidor");
@@ -29,8 +37,8 @@ proRoute.get("/:pid", async (req, res) => {
   const productmgdID = (req.params.pid);
   const productmgd = await productsDao.getProductsById(productmgdID);
 
-  const productAct = productsDao.getProducts()
-  socketServer.emit("productAct", productAct);
+  // const productAct = productsDao.getProducts()
+  // socketServer.emit("productAct", productAct);
 
   if (productmgd) {
     res.send(JSON.stringify(productmgd));
@@ -71,8 +79,8 @@ proRoute.put("/:pid", async (req, res) => {
       updatedProdMgd
     );
 
-    const productAct = productsDao.getProducts();
-    socketServer.emit("productAct", productAct);
+    // const productAct = productsDao.getProducts();
+    // socketServer.emit("productAct", productAct);
 
     res.status(200).send("productos actualizados", updatedProductMgd);
   } catch {
@@ -86,8 +94,8 @@ proRoute.delete("/:pid", async (req, res) => {
   const delProdMgdID = parseInt(req.params.pid);
   const delproductMgd = await productsDao.deleteProduct(delProdMgdID);
 
-  const productAct = productsDao.getProducts();
-  socketServer.emit("productAct", productAct);
+  // const productAct = productsDao.getProducts();
+  // socketServer.emit("productAct", productAct);
 
   if (!delproductMgd) {
     res.send("se ha borrado el producto");

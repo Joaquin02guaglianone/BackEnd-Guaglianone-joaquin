@@ -6,7 +6,7 @@ import __dirname from "./util.js";
 import { proRoute } from "./routes/productsRoute.js";
 import { cartRoute } from "./routes/CartRoute.js";
 import { messagesRoute } from "./routes/messagesRoute.js";
-import { routerProductsView } from "./routes/viewsRouter.js";
+import { routerView } from "./routes/viewsRouter.js";
 
 
 const app = express();
@@ -25,7 +25,7 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars')
 app.use(express.static(__dirname + '/public'));
-app.use("/", routerProductsView)
+app.use("/", routerView)
 app.use("/api/products", proRoute);
 app.use("/api/cart", cartRoute)
 app.use("/api/messages", messagesRoute)
