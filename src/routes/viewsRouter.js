@@ -11,7 +11,7 @@ const cart = new CartManagerDao()
 const msManager = new MessageManagerMdb()
 
 routerView.get('/products', async (req, res) => {
-
+try {
   const limit = parseInt(req.query.limit)
   const page = parseInt(req.query.page)
   const sort = (req.query.sort)
@@ -33,10 +33,15 @@ routerView.get('/products', async (req, res) => {
         AllProducts: productsContext.productsDocs,
         productPaginate: productsContext.productos
     })
+} catch (error) {
+  throw new Error ("ocurrio un error en el servidor")
+}
+
 })
 
 routerView.get("/products/:pid", async (req,res) => {
-  const productsId = (req.params.pid)
+  try {
+      const productsId = (req.params.pid)
 
   let productoIdentificado = await products.getProductsById(productsId)
 
@@ -44,10 +49,14 @@ routerView.get("/products/:pid", async (req,res) => {
     title: "Bienvenido a Gaming Center",
     productoEncontrado : productoIdentificado
   })
+  } catch (error) {
+    throw new Error ("ocurrio un error en el servidor")
+  }
+
 })
  
 routerView.get("/cart/:cid", async (req,res) => {
-
+  try {
 const Cartid = (req.params.cid)
 
 let carritoIdentificado = await cart.getCartId(Cartid)
@@ -58,6 +67,9 @@ res.render("cartCID", {
   title: "Bienvenido a Gaming Center",
   carritoEncontrado : carritoIdentificado
 })
+  } catch (error) {
+    throw new Error ("ocurrio un error en el servidor")
+  }
 
 })
 
@@ -73,4 +85,5 @@ routerView.get("/messages", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
 
