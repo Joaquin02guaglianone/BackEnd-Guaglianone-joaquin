@@ -22,6 +22,10 @@ const cartSchema = new mongoose.Schema({
   },
 });
 
+cartSchema.pre('findOne', function() {
+  this.populate('products.product');
+});
+
 const cartModel = mongoose.model(collectionCarts, cartSchema);
 
 export default cartModel;

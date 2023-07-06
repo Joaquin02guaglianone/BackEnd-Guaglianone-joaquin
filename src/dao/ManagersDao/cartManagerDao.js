@@ -30,7 +30,7 @@ class CartManagerDao {
 
   async getCart() {
     try {
-      const cartsMgd = await this.cartModel.find().populate("productos.product");
+      const cartsMgd = await this.cartModel.find();
       return cartsMgd;
     } catch (error) {
       throw new Error("no se pudieron encontrar carritos");

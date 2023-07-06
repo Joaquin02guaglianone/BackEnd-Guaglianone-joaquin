@@ -60,9 +60,9 @@ cartRoute.delete("/:cid", async (req,res) => {
 
 cartRoute.put("/:cid", async (req,res) => {
   try{
-
+    const updatedProducts = req.body.products
     const cartid = (req.params.cid);
-    const cartId = await cartDao.actCartId(cartid)
+    const cartId = await cartDao.actCartId(cartid, updatedProducts)
     res.send(cartId)
   }catch{
 
@@ -110,10 +110,11 @@ cartRoute.delete("/:cid/product/:pid", async (req,res) => {
 
 cartRoute.put("/:cid/product/:pid", async (req,res) => {
   try {
+    const updatedProduct = req.body
     const cID = (req.params.cid);
     const pID = (req.params.pid);
   
-    const changeCart = cartDao.actProductsToCart(cID, pID)
+    const changeCart = cartDao.actProductsToCart(cID, pID, updatedProduct)
   
     if (changeCart) {
       res.send("se ha añanido el producto")
