@@ -25,7 +25,8 @@ messagesRoute.post("/", async (req, res) => {
         let algo = "mensaje agregado"
         const { user, message } = req.body
         const addMessage = await msManager.addNewMessage(user, message)
-        socketServer.emit('getMessage', message)
+            socketServer.emit('getMessage', message)
+            socketServer.emit("getUser", user)
         if(addMessage) {
             res.status(200).send("Message added")
         }else{

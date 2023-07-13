@@ -8,7 +8,6 @@ class CartManagerDao {
   async addcart() {
     try {
       const newProductCart = await this.cartModel.create({products : []})
-      console.log(newProductCart)
       return newProductCart;
     } catch (error) {
       console.log("error al crear el carrito");
@@ -43,7 +42,7 @@ class CartManagerDao {
       if (!cart) {
         throw new Error("Cart not found");
       }
-      const existingProductIndex = cart.products.findIndex(prod => prod.product === prodId);
+      const existingProductIndex = cart.products.findIndex(prod => prod.product.valueOf() === prodId);
       if (existingProductIndex !== -1) {
         cart.products[existingProductIndex].quantity++;
       } else {

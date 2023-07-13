@@ -1,0 +1,12 @@
+<div>
+    <h1>Tu perfil</h1>
+    <div>
+        {{#if user.role}}
+            <h2>Usted es un administrador de la página</h2>
+        {{/if}}
+    </div>
+    <p>{{user.name}}</p>
+    <p>{{user.email}}</p>
+    <p>{{user.age}}</p>
+    <a href="/api/sessions/logout">Cerrar session</a>
+</div>

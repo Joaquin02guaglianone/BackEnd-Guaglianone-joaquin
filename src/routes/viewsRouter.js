@@ -52,16 +52,14 @@ routerView.get("/products/:pid", async (req,res) => {
   } catch (error) {
     throw new Error ("ocurrio un error en el servidor")
   }
-
 })
- 
+
+
 routerView.get("/cart/:cid", async (req,res) => {
   try {
 const Cartid = (req.params.cid)
 
 let carritoIdentificado = await cart.getCartId(Cartid)
-
-console.log(carritoIdentificado)
 
 res.render("cartCID", {
   title: "Bienvenido a Gaming Center",
@@ -70,8 +68,9 @@ res.render("cartCID", {
   } catch (error) {
     throw new Error ("ocurrio un error en el servidor")
   }
-
 })
+
+// websockets views
 
 routerView.get('/realTimeProducts', (req,res)=>{
     res.render('realTimeProducts', {title: 'Bienvenido a la base gaming', juegos: "nuestros juegos disponibles:"});
@@ -86,4 +85,29 @@ routerView.get("/messages", async (req, res) => {
   }
 });
 
+// users views 
+
+const publicAccess = (req,res,next) => {
+  if(req.session.user) return res.redirect("/products");
+  next(); 
+}
+
+const privateAccess = (req,res,next) => {
+  if(!req.session.user) return res.redirect("/login")
+  next()
+}
+
+routerView.get("/register", publicAccess, (req, res) => {
+  res.render("register")
+})
+
+routerView.get("/login", publicAccess, (req, res) => {
+  res.render("login")
+})
+
+routerView.get("/", privateAccess, (req, res) => {
+  res.render("user", {
+    user : req.session.user
+  })
+})
 

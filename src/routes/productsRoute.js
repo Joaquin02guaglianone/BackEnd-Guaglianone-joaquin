@@ -10,7 +10,7 @@ const productsDao = new productManagerDao();
 
 proRoute.get("/", async (req, res) => {
   try {
-    let productsmgd = await productsDao.getProducts(limit, page, sort, query);
+    let productsmgd = await productsDao.getProducts();
     // const productAct = productsDao.getProducts()
     // socketServer.emit("productAct", productAct);   
       res.send(productsmgd)
