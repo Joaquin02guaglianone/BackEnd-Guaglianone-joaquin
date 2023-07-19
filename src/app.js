@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import passport from "passport";
 import { Server } from "socket.io";
 import __dirname from "./util.js";
 import { proRoute } from "./routes/productsRoute.js";
@@ -11,6 +12,8 @@ import { cartRoute } from "./routes/CartRoute.js";
 import { messagesRoute } from "./routes/messagesRoute.js";
 import { routerView } from "./routes/viewsRouter.js";
 import routerUser from "./routes/userRouter.js";
+import initializePassport from './config/passport.config.js';
+
 
 
 const app = express();
@@ -42,6 +45,11 @@ app.use(session({
   resave : " false ",
   saveUninitialize : " false "
 }))
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(__dirname + '/public'));
 app.use("/", routerView)
 app.use("/api/products", proRoute);

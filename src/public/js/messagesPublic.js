@@ -10,4 +10,3 @@ socket.on(`getMessage`, (message) => {
     $newMessage.appendChild(elementLi)
 
 })
-
