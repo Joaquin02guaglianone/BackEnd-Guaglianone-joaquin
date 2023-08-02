@@ -46,4 +46,8 @@ routerUser.get('/githubcallback', passport.authenticate('github', { failureRedir
     res.redirect('/products');
 });
 
+routerUser.get("/current", passport.authenticate("current", (req,res) => {
+    res.send(req.user)
+} ))
+
 export default routerUser;
