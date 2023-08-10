@@ -3,103 +3,110 @@ import { Product } from "../ProductManager.js";
 import { productManagerDao } from "../dao/ManagersDao/productManagerDao.js";
 import { socketServer } from "../app.js";
 import productModel from "../dao/models/products.js";
+import { getAllProducts, getProductsById, createProduct, updateProduct, deleteProduct } from "../controllers/controlerProduct.js";
 
 export const proRoute = Router();
 
-const productsDao = new productManagerDao();
+proRoute.get('/', getAllProducts);
+proRoute.get('/:id', getProductsById);
+proRoute.post('/', createProduct);
+proRoute.put('/:idUpdate', updateProduct);
+proRoute.delete('/:idDelete', deleteProduct);
 
-proRoute.get("/", async (req, res) => {
-  try {
-    let productsmgd = await productsDao.getProducts();
-    // const productAct = productsDao.getProducts()
-    // socketServer.emit("productAct", productAct);   
-      res.send(productsmgd)
-  } catch {
-    console.log(error);
-    res.status(500).send("error en el servidor");
-  }
-});
+// const productsDao = new productManagerDao();
 
-proRoute.get("/:pid", async (req, res) => {
-  try {
-    const productmgdID = (req.params.pid);
-    const productmgd = await productsDao.getProductsById(productmgdID);
+// proRoute.get("/", async (req, res) => {
+//   try {
+//     let productsmgd = await productsDao.getProducts();
+//     // const productAct = productsDao.getProducts()
+//     // socketServer.emit("productAct", productAct);   
+//       res.send(productsmgd)
+//   } catch {
+//     console.log(error);
+//     res.status(500).send("error en el servidor");
+//   }
+// });
+
+// proRoute.get("/:pid", async (req, res) => {
+//   try {
+//     const productmgdID = (req.params.pid);
+//     const productmgd = await productsDao.getProductsById(productmgdID);
   
-    // const productAct = productsDao.getProducts()
-    // socketServer.emit("productAct", productAct);
+//     // const productAct = productsDao.getProducts()
+//     // socketServer.emit("productAct", productAct);
   
-    if (productmgd) {
-      res.send(productmgd);
-    } else {
-      res.status(500).send("no se pudo encontrar el producto solicitado");
-    }
-  } catch (error) {
-    throw new Error ("ocurrio un error en el server")
-  }
+//     if (productmgd) {
+//       res.send(productmgd);
+//     } else {
+//       res.status(500).send("no se pudo encontrar el producto solicitado");
+//     }
+//   } catch (error) {
+//     throw new Error ("ocurrio un error en el server")
+//   }
 
-});
+// });
 
-proRoute.post("/", async (req, res) => {
-try {
+// proRoute.post("/", async (req, res) => {
+// try {
   
-  let body = req.body;
+//   let body = req.body;
 
-  let addProduct = await productsDao.addProduct(body);
+//   let addProduct = await productsDao.addProduct(body);
 
-  console.log(addProduct)
+//   console.log(addProduct)
 
-  if (addProduct) {
-    // const productAct = productsDao.getProducts();
-    // socketServer.emit("productAct", productAct);
-    return res.status(200).send("productos añadidos");
-  } else {
-    res.status(400).send("no se pudo agregar el producto")
-  }
+//   if (addProduct) {
+//     // const productAct = productsDao.getProducts();
+//     // socketServer.emit("productAct", productAct);
+//     return res.status(200).send("productos añadidos");
+//   } else {
+//     res.status(400).send("no se pudo agregar el producto")
+//   }
   
-} catch (error) {
-  res.status(500).send("error del server");
-}
+// } catch (error) {
+//   res.status(500).send("error del server");
+// }
 
-});
+// });
 
-proRoute.put("/:pid", async (req, res) => {
-  try {
-    const prodMgdID = (req.params.pid);
-    const updatedProdMgd = req.body;
-    const updatedProductMgd = await productsDao.updateProduct(
-      prodMgdID,
-      updatedProdMgd
-    );
+// proRoute.put("/:pid", async (req, res) => {
+//   try {
+//     const prodMgdID = (req.params.pid);
+//     const updatedProdMgd = req.body;
+//     const updatedProductMgd = await productsDao.updateProduct(
+//       prodMgdID,
+//       updatedProdMgd
+//     );
 
-    // const productAct = productsDao.getProducts();
-    // socketServer.emit("productAct", productAct);
+//     // const productAct = productsDao.getProducts();
+//     // socketServer.emit("productAct", productAct);
 
-    res.status(200).send("productos actualizados", updatedProductMgd);
-  } catch {
-    res
-      .status(400)
-      .send("se ha producido un error y no se encontro el producto");
-  }
-});
+//     res.status(200).send("productos actualizados", updatedProductMgd);
+//   } catch {
+//     res
+//       .status(400)
+//       .send("se ha producido un error y no se encontro el producto");
+//   }
+// });
 
-proRoute.delete("/:pid", async (req, res) => {
-  try {
-    const delProdMgdID = (req.params.pid);
-    const delproductMgd = await productsDao.deleteProduct(delProdMgdID);
+// proRoute.delete("/:pid", async (req, res) => {
+//   try {
+//     const delProdMgdID = (req.params.pid);
+//     const delproductMgd = await productsDao.deleteProduct(delProdMgdID);
   
-    // const productAct = productsDao.getProducts();
-    // socketServer.emit("productAct", productAct);
+//     // const productAct = productsDao.getProducts();
+//     // socketServer.emit("productAct", productAct);
   
-    if (!delproductMgd) {
-      res.send("se ha borrado el producto");
-    } else {
-      res.status(400).send("no se ha encontrado el producto que desea borrar");
-    }
-  } catch (error) {
-    throw new Error ("ocurrio un error en el server")
-  }
+//     if (!delproductMgd) {
+//       res.send("se ha borrado el producto");
+//     } else {
+//       res.status(400).send("no se ha encontrado el producto que desea borrar");
+//     }
+//   } catch (error) {
+//     throw new Error ("ocurrio un error en el server")
+//   }
 
-});
+// });
 
 //fileSystem
 

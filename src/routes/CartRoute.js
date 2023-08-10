@@ -1,133 +1,150 @@
 import { Router } from "express";
-import { CartManager } from "../CartManager.js"
+import { CartManager } from "../CartManager.js";
 import { CartManagerDao } from "../dao/ManagersDao/cartManagerDao.js";
+import {
+  getAllCarts,
+  getCartId,
+  createCart,
+  createProductInCart,
+  updateProductInCart,
+  deleteCart,
+  deleteProductInCart,
+  updateCart,
+} from "../controllers/controlerCarts.js";
 
 export const cartRoute = Router();
-const cartDao = new CartManagerDao();
 
-cartRoute.post("/", async (req,res) => {
-  try {
-    let crearCart = await cartDao.addcart();
-if (crearCart) {
-  return res.send("se creo el carrito");
-}else {
-  return res.status(400).send("ocurrio un error en la creacion de carrito")
-}
-  } catch (error) {
-    throw new Error ("ocurrio un error en el server")
-  }
+cartRoute.get('/', getAllCarts);
+cartRoute.get('/:cid', getCartId);
+cartRoute.post('/', createCart);
+cartRoute.post('/:cid/product/:pid', createProductInCart);
+cartRoute.put('/:cid', updateCart);
+cartRoute.put('/:cid/product/:pid', updateProductInCart);
+cartRoute.delete('/:cid', deleteCart);
+cartRoute.delete('/:cid/product/:pid', deleteProductInCart);
 
 
-})
+// const cartDao = new CartManagerDao();
 
-cartRoute.get("/", async (req,res) => {
-  try {
-    const cartMgd = await cartDao.getCart()
+// cartRoute.post("/", async (req,res) => {
+//   try {
+//     let crearCart = await cartDao.addcart();
+// if (crearCart) {
+//   return res.send("se creo el carrito");
+// }else {
+//   return res.status(400).send("ocurrio un error en la creacion de carrito")
+// }
+//   } catch (error) {
+//     throw new Error ("ocurrio un error en el server")
+//   }
 
-    if(cartMgd) {
-      return res.send(cartMgd)
-    }else {
-      return res.status(400).send("no se ha podido encontrar los carritos")
-    }
-  } catch (error) {
-    throw new Error ("ocurrio un error en el server")
-  }
+// })
 
-})
+// cartRoute.get("/", async (req,res) => {
+//   try {
+//     const cartMgd = await cartDao.getCart()
 
-cartRoute.get("/:cid", async (req,res) => {
-  try{
+//     if(cartMgd) {
+//       return res.send(cartMgd)
+//     }else {
+//       return res.status(400).send("no se ha podido encontrar los carritos")
+//     }
+//   } catch (error) {
+//     throw new Error ("ocurrio un error en el server")
+//   }
 
-    const id = (req.params.cid);
-    const cartId = await cartDao.getCartId(id)
-    res.send(cartId)
-  }catch{
+// })
 
-    res.status(500).send("no se ha encontrado el carrito solicitado")
+// cartRoute.get("/:cid", async (req,res) => {
+//   try{
 
-  }
-})
+//     const id = (req.params.cid);
+//     const cartId = await cartDao.getCartId(id)
+//     res.send(cartId)
+//   }catch{
 
-cartRoute.delete("/:cid", async (req,res) => {
-  try{
-    const id = (req.params.cid);
-    const cartId = await cartDao.deleteCartId(id)
-    res.send(cartId)
-  }catch{
-    res.status(500).send("no se ha encontrado el carrito solicitado")
-  }
-})
+//     res.status(500).send("no se ha encontrado el carrito solicitado")
 
-cartRoute.put("/:cid", async (req,res) => {
-  try{
-    const updatedProducts = req.body.products
-    const cartid = (req.params.cid);
-    const cartId = await cartDao.actCartId(cartid, updatedProducts)
-    res.send(cartId)
-  }catch{
+//   }
+// })
 
-    res.status(500).send("no se ha encontrado el carrito solicitado")
+// cartRoute.delete("/:cid", async (req,res) => {
+//   try{
+//     const id = (req.params.cid);
+//     const cartId = await cartDao.deleteCartId(id)
+//     res.send(cartId)
+//   }catch{
+//     res.status(500).send("no se ha encontrado el carrito solicitado")
+//   }
+// })
 
-  }
-})
+// cartRoute.put("/:cid", async (req,res) => {
+//   try{
+//     const updatedProducts = req.body.products
+//     const cartid = (req.params.cid);
+//     const cartId = await cartDao.actCartId(cartid, updatedProducts)
+//     res.send(cartId)
+//   }catch{
 
-cartRoute.post("/:cid/product/:pid", async (req,res) => {
-  try {
-    const cID = (req.params.cid);
-    const pID = (req.params.pid);
-  
-    const agregarAlCart = cartDao.addProductsToCart(cID, pID)
-  
-    if (agregarAlCart) {
-      res.send("se ha añanido el producto")
-    } else {
-      res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
-    }
-  } catch (error) {
-    throw new Error ("ocurrio un error en el server")
-  }
+//     res.status(500).send("no se ha encontrado el carrito solicitado")
 
-})
+//   }
+// })
 
-cartRoute.delete("/:cid/product/:pid", async (req,res) => {
-  try {
-    const cID = (req.params.cid);
-    const pID = (req.params.pid);
-  
-    const deleteFromCart = cartDao.deleteProductsfromCart(cID, pID)
-  
-    if (deleteFromCart) {
-      res.send("se ha añanido el producto")
-    } else {
-      res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
-    }
-  } catch (error) {
-    throw new Error("ocurrio un error")
-  }
+// cartRoute.post("/:cid/product/:pid", async (req,res) => {
+//   try {
+//     const cID = (req.params.cid);
+//     const pID = (req.params.pid);
 
+//     const agregarAlCart = cartDao.addProductsToCart(cID, pID)
 
-})
+//     if (agregarAlCart) {
+//       res.send("se ha añanido el producto")
+//     } else {
+//       res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+//     }
+//   } catch (error) {
+//     throw new Error ("ocurrio un error en el server")
+//   }
 
-cartRoute.put("/:cid/product/:pid", async (req,res) => {
-  try {
-    const updatedProduct = req.body
-    const cID = (req.params.cid);
-    const pID = (req.params.pid);
-  
-    const changeCart = cartDao.actProductsToCart(cID, pID, updatedProduct)
-  
-    if (changeCart) {
-      res.send("se ha añanido el producto")
-    } else {
-      res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
-    }
-  } catch (error) {
-    throw new Error ("ocurrio un error en el server")
-  }
+// })
 
-})
+// cartRoute.delete("/:cid/product/:pid", async (req,res) => {
+//   try {
+//     const cID = (req.params.cid);
+//     const pID = (req.params.pid);
 
+//     const deleteFromCart = cartDao.deleteProductsfromCart(cID, pID)
 
+//     if (deleteFromCart) {
+//       res.send("se ha añanido el producto")
+//     } else {
+//       res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+//     }
+//   } catch (error) {
+//     throw new Error("ocurrio un error")
+//   }
+
+// })
+
+// cartRoute.put("/:cid/product/:pid", async (req,res) => {
+//   try {
+//     const updatedProduct = req.body
+//     const cID = (req.params.cid);
+//     const pID = (req.params.pid);
+
+//     const changeCart = cartDao.actProductsToCart(cID, pID, updatedProduct)
+
+//     if (changeCart) {
+//       res.send("se ha añanido el producto")
+//     } else {
+//       res.status(400).send("ha ocurrido un error al agregar el producto al carrito")
+//     }
+//   } catch (error) {
+//     throw new Error ("ocurrio un error en el server")
+//   }
+
+// })
 
 ////////////////////////////////////////////////////////////////////////
 

@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
+import dotenv from "dotenv"
 import { Server } from "socket.io";
 import __dirname from "./util.js";
 import { proRoute } from "./routes/productsRoute.js";
@@ -14,12 +15,12 @@ import { routerView } from "./routes/viewsRouter.js";
 import routerUser from "./routes/userRouter.js";
 import initializePassport from './config/passport.config.js';
 
-
+dotenv.config()
 
 const app = express();
-const serverHttp = app.listen(8080, () => console.log("se ha iniciado la pagina en el puerto", 8080))
-const superSecret = "Joaquin02"
-const MONGO = `mongodb+srv://joaquinGuaglianone:${superSecret}@back-end-cluster.kle3ie9.mongodb.net/ecommerce`
+const serverHttp = app.listen(process.env.ServerPort, () => console.log("se ha iniciado la pagina en el puerto", process.env.ServerPort))
+
+const MONGO = `mongodb+srv://joaquinGuaglianone:${process.env.superSecret}@back-end-cluster.kle3ie9.mongodb.net/ecommerce`
 const connection = mongoose.connect(MONGO, {
   useNewUrlParser: true,
   useUnifiedTopology: true
