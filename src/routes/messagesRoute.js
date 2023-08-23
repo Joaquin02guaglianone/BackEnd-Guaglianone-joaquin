@@ -2,11 +2,13 @@ import { Router } from "express";
 import MessageManagerMdb from "../dao/ManagersDao/messagesManagerDao.js";
 import { socketServer } from "../app.js";
 import { getMessage, createMessage } from "../controllers/controlerMessage.js";
+import { authToken } from "../util.js";
+
 
 export const messagesRoute = Router();
 
-messagesRoute.get('/', getMessage);
-messagesRoute.post('/', createMessage);
+messagesRoute.get('/',authToken(false), getMessage);
+messagesRoute.post('/',authToken(false), createMessage);
 
 
 // const msManager = new MessageManagerMdb()

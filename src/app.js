@@ -58,6 +58,7 @@ app.use("/api/cart", cartRoute)
 app.use("/api/messages", messagesRoute)
 app.use('/api/sessions', routerUser);
 
+
 app.get("/session", (req,res) => {
   if (!req.session.count) {
     res.send("bienvenido a la pagina");

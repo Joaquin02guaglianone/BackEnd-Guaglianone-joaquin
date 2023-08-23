@@ -2,16 +2,18 @@ import { Router } from "express";
 import { Product } from "../ProductManager.js";
 import { productManagerDao } from "../dao/ManagersDao/productManagerDao.js";
 import { socketServer } from "../app.js";
+import passport from "passport";
 import productModel from "../dao/models/products.js";
 import { getAllProducts, getProductsById, createProduct, updateProduct, deleteProduct } from "../controllers/controlerProduct.js";
+import { authToken } from "../util.js";
 
 export const proRoute = Router();
 
 proRoute.get('/', getAllProducts);
 proRoute.get('/:id', getProductsById);
-proRoute.post('/', createProduct);
-proRoute.put('/:idUpdate', updateProduct);
-proRoute.delete('/:idDelete', deleteProduct);
+proRoute.post('/',authToken(true), createProduct);
+proRoute.put('/:idUpdate',authToken(true), updateProduct);
+proRoute.delete('/:idDelete',authToken(true), deleteProduct);
 
 // const productsDao = new productManagerDao();
 

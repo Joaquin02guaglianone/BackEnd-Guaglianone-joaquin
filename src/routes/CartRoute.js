@@ -1,28 +1,22 @@
 import { Router } from "express";
+import passport from "passport";
 import { CartManager } from "../CartManager.js";
 import { CartManagerDao } from "../dao/ManagersDao/cartManagerDao.js";
-import {
-  getAllCarts,
-  getCartId,
-  createCart,
-  createProductInCart,
-  updateProductInCart,
-  deleteCart,
-  deleteProductInCart,
-  updateCart,
-} from "../controllers/controlerCarts.js";
+import { getAllCarts,getCartId,createCart,createProductInCart,updateProductInCart,deleteCart,deleteProductInCart,updateCart,} from "../controllers/controlerCarts.js";
+import { createTicket } from "../controllers/controllerTicket.js";
+import { authToken } from "../util.js";
 
 export const cartRoute = Router();
 
-cartRoute.get('/', getAllCarts);
-cartRoute.get('/:cid', getCartId);
-cartRoute.post('/', createCart);
-cartRoute.post('/:cid/product/:pid', createProductInCart);
-cartRoute.put('/:cid', updateCart);
-cartRoute.put('/:cid/product/:pid', updateProductInCart);
-cartRoute.delete('/:cid', deleteCart);
-cartRoute.delete('/:cid/product/:pid', deleteProductInCart);
-
+cartRoute.get("/", getAllCarts);
+cartRoute.get("/:cid", getCartId);
+cartRoute.post("/", createCart);
+cartRoute.post("/:cid/product/:pid",authToken(false), createProductInCart);
+cartRoute.put("/:cid", updateCart);
+cartRoute.put("/:cid/product/:pid",authToken(false), updateProductInCart);
+cartRoute.delete("/:cid", deleteCart);
+cartRoute.delete("/:cid/product/:pid",authToken(false), deleteProductInCart);
+cartRoute.post("/:cid/purchase", authToken(false), createTicket);
 
 // const cartDao = new CartManagerDao();
 

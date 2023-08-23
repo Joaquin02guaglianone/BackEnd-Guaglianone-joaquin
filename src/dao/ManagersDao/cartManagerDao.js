@@ -24,7 +24,6 @@ class CartManagerDao {
     } catch (error) {
       throw new Error ("ocurrio un error en la pagina")
     }
-
   }
 
   async getCart() {
@@ -43,8 +42,9 @@ class CartManagerDao {
         throw new Error("Cart not found");
       }
       const existingProductIndex = cart.products.findIndex(prod => prod.product.valueOf() === prodId);
+      console.log(existingProductIndex)
       if (existingProductIndex !== -1) {
-        cart.products[existingProductIndex].quantity++;
+        cart.products.quantity++;
       } else {
         const newProduct = { product: prodId, quantity: 1 };
         cart.products.push(newProduct);

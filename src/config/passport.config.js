@@ -1,10 +1,19 @@
 import passport from "passport";
 import local from "passport-local";
+import { default as token} from 'jsonwebtoken';
+import jwt from 'passport-jwt';
 import userModel from "../dao/models/users.js";
 import { createHash, IsValidPassword } from "../util.js";
 import GitHubStrategy from "passport-github2";
+import userDto from "../dto/userDto.js";
 
 const LocalStrategy = local.Strategy;
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
+
+const PRIVATE_KEY = "CoderKeyFeliz";
+
+export const generateToken = user => token.sign({ user }, PRIVATE_KEY, { expiresIn: '1d' })
 
 const initializePassport = () => {
   passport.use(
@@ -33,7 +42,7 @@ const initializePassport = () => {
             email,
             age,
             password: createHash(password),
-            role,
+            userRole: role,
           };
           user = await userModel.create(newUser);
           return done(null, user);
@@ -46,31 +55,32 @@ const initializePassport = () => {
     )
   );
 
-  passport.use(
-    "login",
-    new LocalStrategy(
-      {
-        usernameField: "email",
-      },
-      async (username, password, done) => {
-        try {
-          const user = await userModel.findOne({
-            email: username,
-          });
-          if (!user)
-            return done(null, false, {
-              message: "User not found",
-            });
-          if (!IsValidPassword(user, password)) return done(null, false);
-          return done(null, user);
-        } catch (error) {
-          return done({
-            message: "Error logging in",
-          });
-        }
-      }
-    )
-  );
+  passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username , password, done) => {
+    try {
+        const user = await userModel.findOne({ email: username });
+        if (!user) return done(null, false, { message: "User not found" });
+        if (!IsValidPassword(user, password)) return done(null, false);
+        const { password: pass, ...userNoPass} = user._doc;
+        const jwt = generateToken(userNoPass);
+        return done(null, userNoPass);
+    } catch (error) {
+        return done({ message: "Error logging in" });
+    }
+}));
+
+passport.use('current', new JWTStrategy({
+    jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+    secretOrKey: PRIVATE_KEY
+}, async (jwt_payload, done) => {
+    try {
+         const filter = new userDto(jwt_payload)
+         console.log(filter)
+        return done(null, filter);
+    } catch (error) {
+        return done(error);
+    }
+}
+));
 
   passport.use(
     "github",
@@ -113,6 +123,18 @@ const initializePassport = () => {
       return done({ message: "Error deserializing user" });
     }
   });
+
 };
 
+export const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+      token = req.cookies['coderCookieToken'];
+  }
+  return token;
+};
+
+
+
 export default initializePassport;
+

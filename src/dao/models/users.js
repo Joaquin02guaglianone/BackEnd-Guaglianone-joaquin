@@ -16,10 +16,7 @@ const UserSchema = new mongoose.Schema({
         }
 })
 
-UserSchema.pre('findOne', function() {
-    this.populate('userSchema.cart');
-  });
-
 const userModel = mongoose.model(collectionUsers, UserSchema);
 
 export default userModel;
+
