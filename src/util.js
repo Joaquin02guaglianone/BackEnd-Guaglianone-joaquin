@@ -2,6 +2,7 @@ import {fileURLToPath} from 'url';
 import  jwt  from 'jsonwebtoken';
 import {dirname} from 'path';
 import bcrypt from "bcrypt"
+import { faker } from '@faker-js/faker';
 
 const PRIVATE_KEY = "CoderKeyFeliz";
 
@@ -23,6 +24,24 @@ export const authToken = (role) => {
             next();
         })
 }}
+
+export const generateMocks = () => {
+    let products = [];
+    for(let i = 0; i<50; i++){
+        let newProd = {
+            title: faker.commerce.productName(),
+            description: faker.commerce.productDescription(),
+            code: faker.string.alphanumeric({ length: { min: 5, max: 10 } }),
+            price: faker.commerce.price({ dec: 0, symbol: '$' }),
+            stock: faker.string.numeric(3),
+            category: faker.commerce.department(),
+            thumbnail: faker.img.url(),
+            id: faker.database.mongodbObjectId(),
+        }
+        products.push(newProd);
+    }
+    return products
+}
 
 
 export default __dirname;

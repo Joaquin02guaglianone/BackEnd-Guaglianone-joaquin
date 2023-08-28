@@ -1,4 +1,7 @@
 import { ProductService } from "../services/serviceProduct.js";
+import { addProductError } from "../services/errores/errorInformation.js";
+import CustomError from "../services/errores/customError.js";
+import EErrors from "../services/errores/Enum.js";
 
 const productService = new ProductService()
 
@@ -35,7 +38,12 @@ export const createProduct = async (req, res) => {
         if (addProduct) {
           res.status(200).send("Add product successfully");
         } else {
-          res.status(400).send("Fail to add");
+          CustomError.createError({
+            name: "error de creacion",
+            cause: addProductError(),
+            code: EErrors.INVALID_TYPES_ERROR,
+            message: "error al crear el producto",
+          });
         }
       } catch (error) {
         res.status(500).send("Internal server error");

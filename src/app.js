@@ -15,6 +15,7 @@ import { routerView } from "./routes/viewsRouter.js";
 import routerUser from "./routes/userRouter.js";
 import initializePassport from './config/passport.config.js';
 
+
 dotenv.config()
 
 const app = express();
