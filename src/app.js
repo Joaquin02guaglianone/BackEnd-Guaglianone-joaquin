@@ -14,11 +14,13 @@ import { messagesRoute } from "./routes/messagesRoute.js";
 import { routerView } from "./routes/viewsRouter.js";
 import routerUser from "./routes/userRouter.js";
 import initializePassport from './config/passport.config.js';
+import { addLogger, loggerInfo } from "./logger/logger.js";
 
 
 dotenv.config()
 
 const app = express();
+app.use(addLogger);
 const serverHttp = app.listen(process.env.ServerPort, () => console.log("se ha iniciado la pagina en el puerto", process.env.ServerPort))
 
 const MONGO = `mongodb+srv://joaquinGuaglianone:${process.env.superSecret}@back-end-cluster.kle3ie9.mongodb.net/ecommerce`
@@ -59,6 +61,17 @@ app.use("/api/cart", cartRoute)
 app.use("/api/messages", messagesRoute)
 app.use('/api/sessions', routerUser);
 
+
+
+app.get("/api/loggerTest", (req, res) => {
+  req.logger.debug('Error debug Dev')
+  req.logger.http("HTTP Error Dev")
+  req.logger.info("Info Dev")
+  req.logger.warning("Warning Dev")
+   req.logger.error("Un error")
+  // req.logger.fatal("Un error fatal")
+  res.send('')
+})
 
 app.get("/session", (req,res) => {
   if (!req.session.count) {
