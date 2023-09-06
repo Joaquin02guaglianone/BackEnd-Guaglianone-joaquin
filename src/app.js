@@ -21,7 +21,12 @@ dotenv.config()
 
 const app = express();
 app.use(addLogger);
-const serverHttp = app.listen(process.env.ServerPort, () => console.log("se ha iniciado la pagina en el puerto", process.env.ServerPort))
+
+const serverHttp = app.listen(process.env.ServerPort, () =>  
+{const info = loggerInfo()  
+  info.info(`The server is working correctly on the port ${process.env.ServerPort}`)
+  ;}
+  )
 
 const MONGO = `mongodb+srv://joaquinGuaglianone:${process.env.superSecret}@back-end-cluster.kle3ie9.mongodb.net/ecommerce`
 const connection = mongoose.connect(MONGO, {
