@@ -10,7 +10,7 @@ const transport = nodemailer.createTransport(emailEnv.mailing);
 export const sendEmail = async (req, res) => {
   try {
     const email = req.params.email;
-    const jwt = generateTokenRecover(email);
+    const jwt = createJwt(email);
     console.log(jwt)
 
     transport.sendMail({
@@ -33,7 +33,7 @@ export const sendEmail = async (req, res) => {
         return token.sign({ email }, PRIVATE_KEY, { expiresIn: '1h' })
     }
 
-  export const changeUserRole = (req, res) => {
+ export const changeUserRole = (req, res) => {
         try {
           const userId = req.params.uid;
           const updatedRole = req.body.role;
