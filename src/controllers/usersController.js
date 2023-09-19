@@ -41,7 +41,7 @@ export const sendEmail = async (req, res) => {
           if (["user", "premium"].includes(updatedRole)) {
             const updateUser = userModel.findByIdAndUpdate(
               userId,
-              { role: updatedRole },
+              { userRole: updatedRole },
               { new: true }
             );
       
