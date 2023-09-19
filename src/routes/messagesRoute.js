@@ -7,8 +7,8 @@ import { authToken } from "../util.js";
 
 export const messagesRoute = Router();
 
-messagesRoute.get('/',authToken(false), getMessage);
-messagesRoute.post('/',authToken(false), createMessage);
+messagesRoute.get('/',authToken("user"), getMessage);
+messagesRoute.post('/',authToken("user"), createMessage);
 
 
 // const msManager = new MessageManagerMdb()

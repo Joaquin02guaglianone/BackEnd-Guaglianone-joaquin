@@ -3,6 +3,7 @@ import {Product} from "../ProductManager.js";
 import { productManagerDao } from "../dao/ManagersDao/productManagerDao.js";
 import { CartManagerDao } from "../dao/ManagersDao/cartManagerDao.js";
 import MessageManagerMdb from "../dao/ManagersDao/messagesManagerDao.js";
+import { validarToken } from "../util.js";
 
 export const routerView = Router()
 
@@ -53,7 +54,6 @@ routerView.get("/products/:pid", async (req,res) => {
     throw new Error ("ocurrio un error en el servidor")
   }
 })
-
 
 routerView.get("/cart/:cid", async (req,res) => {
   try {
@@ -111,3 +111,6 @@ routerView.get("/", privateAccess, (req, res) => {
   })
 })
 
+routerView.get('/recover-account/:token', validarToken, (req, res) => {
+  res.render('recover-account', { token: req.params.token });
+})

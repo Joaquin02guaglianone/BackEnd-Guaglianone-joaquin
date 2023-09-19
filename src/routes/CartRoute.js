@@ -11,12 +11,12 @@ export const cartRoute = Router();
 cartRoute.get("/", getAllCarts);
 cartRoute.get("/:cid", getCartId);
 cartRoute.post("/", createCart);
-cartRoute.post("/:cid/product/:pid",authToken(false), createProductInCart);
+cartRoute.post("/:cid/product/:pid",authToken(["user", "premium"]), createProductInCart);
 cartRoute.put("/:cid", updateCart);
-cartRoute.put("/:cid/product/:pid",authToken(false), updateProductInCart);
+cartRoute.put("/:cid/product/:pid",authToken(["user", "premium"]), updateProductInCart);
 cartRoute.delete("/:cid", deleteCart);
-cartRoute.delete("/:cid/product/:pid",authToken(false), deleteProductInCart);
-cartRoute.post("/:cid/purchase", authToken(false), createTicket);
+cartRoute.delete("/:cid/product/:pid",authToken(["user", "premium"]), deleteProductInCart);
+cartRoute.post("/:cid/purchase", authToken(["user", "premium"]), createTicket);
 
 // const cartDao = new CartManagerDao();
 

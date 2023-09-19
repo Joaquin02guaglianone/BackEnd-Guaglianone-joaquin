@@ -51,6 +51,14 @@ export const createProductInCart = async (req, res) => {
         const pID = req.params.pid;
         const productToCart = await cartService.addProducts(cID, pID);
     
+        if (req.user.role === "premium") {
+          const product = await productService.getById(pID)
+
+        if (product.owner === req.user.email) {
+        return res.status(401).send("A premium user cannot add their own product to the cart.");
+      }
+        }
+
         if (productToCart) {
           res.send("Product added to cart");
         } else if (cID === undefined) {

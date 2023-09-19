@@ -11,9 +11,9 @@ export const proRoute = Router();
 
 proRoute.get('/', getAllProducts);
 proRoute.get('/:id', getProductsById);
-proRoute.post('/',authToken(true), createProduct);
-proRoute.put('/:idUpdate',authToken(true), updateProduct);
-proRoute.delete('/:idDelete',authToken(true), deleteProduct);
+proRoute.post('/',authToken(["admin", "premium"]), createProduct);
+proRoute.put('/:idUpdate',authToken(["admin", "premium"]), updateProduct);
+proRoute.delete('/:idDelete',authToken(["admin", "premium"]), deleteProduct);
 
 // const productsDao = new productManagerDao();
 

@@ -31,9 +31,9 @@ const initializePassport = () => {
           });
           if (user) return done(null, false);
 
-          let role = false;
+          let role = "user";
           if (email.includes("admin")) {
-            role = true;
+            role = "admin";
           }
 
           const newUser = {

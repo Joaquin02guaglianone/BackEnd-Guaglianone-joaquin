@@ -20,7 +20,18 @@ export const authToken = (role) => {
         jwt.verify(token, PRIVATE_KEY, (error, credentials) => {
             if (error) return res.status(401).send({ status: "error", error: "Unauthorized" })
             req.user = credentials;
-            if (role !== req.user.admin) return res.send({status:0, msg: "forbidden"})
+            if (role) {
+                const userRoles = Array.isArray(req.user.role) ? req.user.role : [req.user.role];
+                if (Array.isArray(role)) {
+                    if (!role.some(r => userRoles.includes(r))) {
+                        return res.status(403).send({ status: 0, msg: 'Forbidden' });
+                    }
+                } else {
+                    if (!userRoles.includes(role)) {
+                        return res.status(403).send({ status: 0, msg: 'Forbidden' });
+                    }
+                }
+            }
             next();
         })
 }}
@@ -41,6 +52,19 @@ export const generateMocks = () => {
         products.push(newProd);
     }
     return products
+}
+
+export const validarToken = (req, res, next) => {
+    try {
+        const token = req.params.token;
+        jwt.verify(token, PRIVATE_KEY);
+        const data = jwt.decode(token);
+        req.email = data.email;
+        next();
+    } catch (e) {
+        res.send(`Hubo un error al intentar recuperar password: ${e.message}`)
+    }
+    
 }
 
 
