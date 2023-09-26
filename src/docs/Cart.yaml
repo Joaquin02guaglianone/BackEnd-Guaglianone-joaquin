@@ -1,0 +1,245 @@
+paths:
+  /api/cart/:
+    get:
+      summary: Obtener todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Todos los carritos fueron obtenidos de la base de datos satisfactoriamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart" 
+        "400":
+          description: Ocurrio un error en la solicitud y no se pudieron encontrar los carritos          
+        "500":
+          description: Ocurrio un error interno del servidor y no se pudo procesar la peticion
+
+    post:
+      summary: crear un carrito en la base de datos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: El carrito se creo de forma satisfactoria 
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "404":
+          description: Ocurrio un error en la peticion para crear un carrito
+        "500":
+          description: Ocurrio un error interno del server, no se puede ejecutar la solicitud      
+
+  /api/cart/{cid}:
+    get:
+      summary: Obtener un carrito por id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Id para conseguir el carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: se ha encontrado el carrito de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "400":
+          description: no se pudo encontrar el carrito por un error en la peticion
+        "500":
+          description: error interno del servidor no se pudo procesar la peticion
+
+    put:
+      summary: Actulizar un carrito en base a su id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID para actualizar el carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Se actulizo el carrito de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "400":
+          description: Ocurrio un error y no se pudo ejecutar la peticion 
+        "500":
+          description: Ocurrio un error interno del server y no se logro ejecutar la peticion
+
+    delete:
+      summary: Borrar todos los productos de un carrito por su id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Id para borrar los productos de un carrito 
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Los productos fueron eliminados de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "40o":
+          description: Ocurrio un error al procesar la peticion y no se logro completar 
+        "500":
+          description: Ocurrio un error interno del server y no se puede ejecutar esta funcion
+      
+  /api/cart/{cid}/product/{pid}:
+    post:
+      summary: Agregar un producto al carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Id del carrito al que se le agrega un producto
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Id del productos que se va a agregar al carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: El producto se agrego de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "400":
+          description: Ocurrio un error en la peticion y no se pudo agregar el producto solicitado en el carrito 
+        "500":
+          description: Ocurrio un error interno del servidor y no se pudo procesar la peticion de forma correcta
+
+    put:
+      summary: Actualizar un producto del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito al cual se le va a actualizar un producto
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto que se desea actualizar
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: El producto se actualizo de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "400":
+          description: Ocurrio un error en la solicitud y no se pudo procesar la peticion 
+        "500":
+          description: Ocurrio un error interno del server y no se pudo ejecutar la funcion 
+
+    delete:
+      summary: Eliminar un producto del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Id del carrito del cual se desea eliminar un producto
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Id del producto que se desea eliminar
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: el producto fue eliminado de froma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "400":
+          description: ocurrio un error en la solicitud y no se pudo completar la peticion 
+        "500":
+          description: Ocurrio un error interno del server y no se logro completar la peticion
+
+  /api/cart/{cid}/purchase:
+    post:
+      summary: Completar la compra del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Id del carrito que se desea comprar
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: la compra se ejecuto de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "404":
+          description: Ocurrio un error en la peticion y no se logro comprar el carrito solicitado
+        "500":
+          description: Ocurrio un error interno del server y no se logro completar la compra         
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID autogenerado de mongo.
+        products:
+          type: array
+          description: listado de productos que hay en el carrito
+          items:
+            type: object
+            properties:
+              product:
+                type: ObjectId
+                description: ID de los porductos
+                required: true
+              quantity:
+                type: Number
+                description: cantidad del producto en el carrito
+                required: true
+                default: 1
+      example:
+        _id: ObjectId("647fa8c9e46dbc5a20320182")
+        products: []
+        total: 0

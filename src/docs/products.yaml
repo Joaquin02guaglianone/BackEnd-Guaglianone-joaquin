@@ -1,0 +1,192 @@
+paths:
+  /api/products/:
+    get:
+      summary: Mostrar todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Se consiguieron todos los productos de la base de datos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Products"
+        "400":
+          description: Ocurrio un error y no se pudieron conseguir los productos
+        "500":
+          description: Ocurrio un error interno del server y no se pudieron mostrar los productos
+
+    post:
+      summary: Creacion de productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El producto fue creado satisfactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Products"
+        "400":
+          description: Ocurrio un error en la creacion del producto
+        "500":
+          description: Ocurrio un error interno del server y no se pudo crear el producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/bodyProducts"
+  /api/products/{id}:
+    get:
+      summary: Buscar productos por id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: ID para buscar el producto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: El producto fue encontrado de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Products"
+        "400":
+          description: Ocurrio un error y no se pudo encontrar el producto
+        "500":
+          description: Ocurrio un error interno del server y no se pudo encontrar el producto
+    put:
+      summary: Actualizar un producto por id
+      tags:
+        - Products
+      parameters:
+        - name: idUpdate
+          in: path
+          description: Id del producto que se desea actualizar 
+          required: true
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: El producto se actualizo de forma correcta
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Products"
+        "404":
+          description: Ocurrio un error y no se pudo actualizar el producto
+        "500":
+          description: Ocurrio un error interno del server y no se pudo actualizar el producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/bodyProducts"
+    delete:
+      summary: Borrar un producto por id
+      tags:
+        - Products
+      parameters:
+        - name: idDelete
+          in: path
+          description: Id para borrar un producto
+          required: true
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: el producto se elimino satisfactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Products"
+        "404":
+          description: Ocurrio un error en la peticion y no se borro el producto
+        "500":
+          description: Ocurrio un error interno del server y no se completo la funcion
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por mongo
+        title:
+          type: String
+          description: Nombre del producto  
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnails:
+          type: Array
+          description: Imagen del producto
+        code:
+          type: Number
+          description: Codigo del producto
+        stock:
+          type: Number
+          description: Stock disponible del producto
+        category:
+          type: Array
+          description: Categorias del producto
+        owner:
+          type: String
+          description: Dueño del producto
+      example:
+        _id: ObjectId("649a25e21c1853ff41332aaa")
+        title: nombre ejemplo
+        price: 15000
+        thumbnails: imagen ejemplo
+        code: 78
+        stock: 1000
+        category: Aventura
+        owner: SirFrancisDrake@gmail.com
+
+  requestBodies:
+    bodyProducts:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por mongo
+        title:
+          type: String
+          description: Nombre del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnails:
+          type: Array
+          description: Imagen del producto
+        code:
+          type: Number
+          description: Codigo del producto
+        stock:
+          type: Number
+          description: Stock disponible del producto
+        category:
+          type: Array
+          description: Categorias del producto
+        owner:
+          type: String
+          description: Dueño del producto
+
+      example:
+        _id: ObjectId("649a25e21c1853ff41332aaa")
+        title: nombre ejemplo
+        price: 15000
+        thumbnails: imagen ejemplo
+        code: 78
+        stock: 1000
+        category: Aventura
+        owner: SirFrancisDrake@gmail.com
