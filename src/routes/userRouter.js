@@ -3,7 +3,7 @@ import passport, { Passport } from 'passport';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import userModel from '../dao/models/users.js';
-import { sendEmail, changeUserRole } from '../controllers/usersController.js';
+import { sendEmail, changeUserRole, restorePass } from '../controllers/usersController.js';
 import { validarToken } from '../util.js';
 
 const routerUser = Router();
@@ -48,13 +48,10 @@ routerUser.get('/logout', (req, res) => {
 
 routerUser.post("/premium/:uid", changeUserRole)
 
-routerUser.get("/recoverpassword/:email", async (req, res) => {
-    await sendEmail(req.params.email)
-    res.send("mail enviado")
-})
 
-routerUser.post('/pass-change/:token', validarToken, async (req, res) => {
-});
+routerUser.get('/recoverpassword/:email', sendEmail)
+
+routerUser.post('/restore-pass/:token', validarToken, restorePass);
 
 routerUser.get('/github', passport.authenticate('github', { scope: ['user:email'] }), async (req, res) => { });
 
@@ -64,3 +61,4 @@ routerUser.get('/githubcallback', passport.authenticate('github', { failureRedir
 });
 
 export default routerUser;
+

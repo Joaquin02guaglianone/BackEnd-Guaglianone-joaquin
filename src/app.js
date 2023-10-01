@@ -45,7 +45,7 @@ const swaggerOptions = {
   apis: [`${__dirname}/docs/*.yaml`],
 };
 
-const MONGO = `mongodb+srv://joaquinGuaglianone:${process.env.superSecret}@back-end-cluster.kle3ie9.mongodb.net/ecommerce`;
+const MONGO = `mongodb+srv://joaquinGuaglianone:Joaquin02@back-end-cluster.kle3ie9.mongodb.net/ecommerce`;
 const connection = mongoose.connect(MONGO, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

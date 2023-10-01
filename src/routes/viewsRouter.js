@@ -111,6 +111,6 @@ routerView.get("/", privateAccess, (req, res) => {
   })
 })
 
-routerView.get('/recover-account/:token', validarToken, (req, res) => {
-  res.render('recover-account', { token: req.params.token });
+routerView.get('/restore-pass/:token', validarToken, (req, res) => {
+  res.render('restore-pass', { token: req.params.token });
 })
