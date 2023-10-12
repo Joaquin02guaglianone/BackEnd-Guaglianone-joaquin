@@ -62,6 +62,7 @@ const initializePassport = () => {
         if (!IsValidPassword(user, password)) return done(null, false);
         const { password: pass, ...userNoPass} = user._doc;
         const jwt = generateToken(userNoPass);
+        await user.updateOne({ last_connection: new Date() });
         return done(null, userNoPass);
     } catch (error) {
         return done({ message: "Error logging in" });
@@ -137,4 +138,3 @@ export const cookieExtractor = (req) => {
 
 
 export default initializePassport;
-

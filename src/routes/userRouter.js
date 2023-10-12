@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import passport, { Passport } from 'passport';
+import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import userModel from '../dao/models/users.js';
 import { sendEmail, changeUserRole, restorePass } from '../controllers/usersController.js';
 import { validarToken } from '../util.js';
+import { uploader } from '../util.js';
 
 const routerUser = Router();
 routerUser.use(cookieParser());
@@ -39,19 +40,34 @@ routerUser.get('/current', passport.authenticate('current', { session: false }),
     res.send(req.user);
  });
 
-routerUser.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) return res.status(500).send({ status: "error", error: "Couldn't logout" });
-        res.redirect('/');
-    });
+routerUser.get('/logout', async (req, res) => {
+    if (req.session) {
+        const correo = req.session.user.email 
+        const user = await userModel.findOne({email: correo})
+        await user.updateOne({ last_connection: new Date() });
+
+        req.session.destroy(err => {
+            if (err) return res.status(500).send({ status: "error", error: "Couldn't logout" });
+            res.redirect('/');
+        });
+    }
 });
 
 routerUser.post("/premium/:uid", changeUserRole)
 
-
 routerUser.get('/recoverpassword/:email', sendEmail)
 
 routerUser.post('/restore-pass/:token', validarToken, restorePass);
+
+routerUser.post('/:uid/documents', uploader.documents('documents').array('documents'), async (req,res)=> {
+    try {
+        const { uid } = req.params;
+        // const user = await usersController.updateUserDocuments(uid, req.files);
+        res.send({ message: 'User documents updated!', user });
+    } catch (e) {
+        res.json({ error: e.message });
+    }
+})
 
 routerUser.get('/github', passport.authenticate('github', { scope: ['user:email'] }), async (req, res) => { });
 
