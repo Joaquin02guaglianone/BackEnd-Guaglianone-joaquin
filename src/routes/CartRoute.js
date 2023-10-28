@@ -16,7 +16,7 @@ cartRoute.put("/:cid", updateCart);
 cartRoute.put("/:cid/product/:pid",authToken(["user", "premium"]), updateProductInCart);
 cartRoute.delete("/:cid", deleteCart);
 cartRoute.delete("/:cid/product/:pid",authToken(["user", "premium"]), deleteProductInCart);
-cartRoute.post("/:cid/purchase", authToken(["user", "premium"]), createTicket);
+cartRoute.post("/:cid/purchase", createTicket);
 
 // const cartDao = new CartManagerDao();
 

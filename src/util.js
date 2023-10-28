@@ -3,6 +3,8 @@ import  jwt  from 'jsonwebtoken';
 import {dirname} from 'path';
 import bcrypt from "bcrypt"
 import { faker } from '@faker-js/faker';
+import multer from "multer";
+import { cookieExtractor } from './config/passport.config.js';
 
 const PRIVATE_KEY = "CoderKeyFeliz";
 
@@ -14,14 +16,13 @@ const __dirname = dirname(__filename);
 
 export const authToken = (role) => {
     return async (req, res, next) => {
-        const authHeader = req.headers.codercookietoken;
-        if (!authHeader) return res.status(401).send({ status: "error", error: "Unauthorized" })
-        const token = authHeader.split(' ')[1];
+        const token = cookieExtractor(req)
+        if (!token) return res.status(401).send({ status: "error", error: "Unauthorized" })
         jwt.verify(token, PRIVATE_KEY, (error, credentials) => {
             if (error) return res.status(401).send({ status: "error", error: "Unauthorized" })
             req.user = credentials;
             if (role) {
-                const userRoles = Array.isArray(req.user.role) ? req.user.role : [req.user.role];
+                const userRoles = Array.isArray(req.user.userRole) ? req.user.userRole : [req.user.userRole];
                 if (Array.isArray(role)) {
                     if (!role.some(r => userRoles.includes(r))) {
                         return res.status(403).send({ status: 0, msg: 'Forbidden' });
@@ -46,7 +47,7 @@ export const generateMocks = () => {
             price: faker.commerce.price({ dec: 0, symbol: '$' }),
             stock: faker.string.numeric(3),
             category: faker.commerce.department(),
-            thumbnail: faker.img.url(),
+            thumbnail: faker.image.url(),
             id: faker.database.mongodbObjectId(),
         }
         products.push(newProd);
@@ -66,6 +67,24 @@ export const validarToken = (req, res, next) => {
     }
     
 }
+
+export const uploader = (folderName) => {
+    return multer({
+      storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, path.join(`${__dirname}/public/uploads/${folderName}`));
+        },
+        filename: function (req, file, cb) {
+          console.log("🚀 ~ file: upload-img.js:12 ~ file", file);
+          cb(null, `${Date.now()}-${file.originalname}`);
+        },
+      }),
+      onError: function (err, next) {
+        console.log("🚀 ~ file: upload-img.js:17 ~ err ERROR AQUI", err);
+        next();
+      },
+    })
+  }
 
 
 export default __dirname;

@@ -4,6 +4,7 @@ import { productManagerDao } from "../dao/ManagersDao/productManagerDao.js";
 import { CartManagerDao } from "../dao/ManagersDao/cartManagerDao.js";
 import MessageManagerMdb from "../dao/ManagersDao/messagesManagerDao.js";
 import { validarToken } from "../util.js";
+import { userById } from "../controllers/controllerUsers.js";
 
 export const routerView = Router()
 
@@ -11,7 +12,17 @@ const products = new productManagerDao()
 const cart = new CartManagerDao()
 const msManager = new MessageManagerMdb()
 
-routerView.get('/products', async (req, res) => {
+const publicAccess = (req,res,next) => {
+  if(req.session.user) return res.redirect("/products");
+  next(); 
+}
+
+const privateAccess = (req,res,next) => {
+  if(!req.session.user) return res.redirect("/login")
+  next()
+}
+
+routerView.get('/products', privateAccess, async (req, res) => {
 try {
   const limit = parseInt(req.query.limit)
   const page = parseInt(req.query.page)
@@ -24,7 +35,7 @@ try {
 
    const productsContext = {
     productos : productsmgd,
-    productsDocs : productsJSON
+    productsDocs : productsJSON,
     };
 
     res.render('products', {
@@ -32,7 +43,8 @@ try {
         pag: "Gaming Center",
         games: "Juegos Disponibles",
         AllProducts: productsContext.productsDocs,
-        productPaginate: productsContext.productos
+        productPaginate: productsContext.productos,
+        user: req.session.user
     })
 } catch (error) {
   throw new Error ("ocurrio un error en el servidor")
@@ -40,7 +52,7 @@ try {
 
 })
 
-routerView.get("/products/:pid", async (req,res) => {
+routerView.get("/products/:pid", privateAccess, async (req,res) => {
   try {
       const productsId = (req.params.pid)
 
@@ -48,7 +60,8 @@ routerView.get("/products/:pid", async (req,res) => {
 
   res.render("prodPID", {
     title: "Bienvenido a Gaming Center",
-    productoEncontrado : productoIdentificado
+    productoEncontrado : productoIdentificado,
+    user : req.session.user
   })
   } catch (error) {
     throw new Error ("ocurrio un error en el servidor")
@@ -60,6 +73,7 @@ routerView.get("/cart/:cid", async (req,res) => {
 const Cartid = (req.params.cid)
 
 let carritoIdentificado = await cart.getCartId(Cartid)
+
 
 res.render("cartCID", {
   title: "Bienvenido a Gaming Center",
@@ -87,16 +101,6 @@ routerView.get("/messages", async (req, res) => {
 
 // users views 
 
-const publicAccess = (req,res,next) => {
-  if(req.session.user) return res.redirect("/products");
-  next(); 
-}
-
-const privateAccess = (req,res,next) => {
-  if(!req.session.user) return res.redirect("/login")
-  next()
-}
-
 routerView.get("/register", publicAccess, (req, res) => {
   res.render("register")
 })
@@ -109,6 +113,31 @@ routerView.get("/", privateAccess, (req, res) => {
   res.render("user", {
     user : req.session.user
   })
+})
+
+routerView.get("/users/:userid", async (req,res) => {
+  try {
+    const userId = (req.params.userid)
+
+    let userFound = await userById(userId)
+
+    console.log(userFound)
+
+    res.render("usuarioId", { usuario: userFound })
+
+  } catch (error) {
+    res.status(500).send("Internal server error");
+  }
+})
+
+routerView.get("/lastScreen", privateAccess, async (req,res) => {
+try {
+  res.render("completePurchase", {
+    user : req.session.user
+  })
+} catch (error) {
+  res.status(500).send("error del server")
+}
 })
 
 routerView.get('/restore-pass/:token', validarToken, (req, res) => {

@@ -1,4 +1,8 @@
 import productModel from "../models/products.js";
+import nodemailer from "nodemailer";
+import emailEnv from "../../MaillingConfig.js"
+
+const transport = nodemailer.createTransport(emailEnv.mailing);
 
 class productManagerDao {
   constructor() {
@@ -16,7 +20,7 @@ class productManagerDao {
 
   async getProductsById(productId) {
     try {
-      const productFind = await this.productModel.findById(productId);
+      const productFind = await this.productModel.findById(productId).lean();
       if (!productFind) {
         throw new Error("Product not found");
       }
@@ -28,12 +32,32 @@ class productManagerDao {
 
   async deleteProduct(productId) {
     try {
-      const productDelete = await this.productModel.findByIdAndDelete(
-        productId
-      );
-      if (!productDelete) {
+      const prodId = productId
+
+      if (!prodId) {
         throw new Error("Product not found");
       }
+
+      const product = await this.productModel.findById(prodId)
+
+      const email = product.owner
+
+      transport.sendMail({
+        from: `Gaming Center <${emailEnv.mailing.auth.user}>`,
+        to: email,
+        subject: "Producto retirado",
+        html: `<h1> tu producto fue retirado de la tienda </h1>
+                          <hr>
+                          <p> ${product.title} fue eliminado de la tienda </p>
+                  `,
+      });
+
+      const productDelete = await this.productModel.findByIdAndDelete(
+        prodId
+      );
+
+      return productDelete; 
+
     } catch (error) {
       throw new Error(
         "no se ha podido encontrar y borrar el producto debido a un error"

@@ -14,6 +14,7 @@ import { proRoute } from "./routes/productsRoute.js";
 import { cartRoute } from "./routes/CartRoute.js";
 import { messagesRoute } from "./routes/messagesRoute.js";
 import { routerView } from "./routes/viewsRouter.js";
+import { userRouter } from "./routes/RouterUsers.js";
 import routerUser from "./routes/userRouter.js";
 import initializePassport from "./config/passport.config.js";
 import { addLogger, loggerInfo } from "./logger/logger.js";
@@ -87,6 +88,7 @@ app.use("/api/products", proRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/messages", messagesRoute);
 app.use("/api/sessions", routerUser);
+app.use("/api/users", userRouter)
 app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs));
 
 app.get("/api/loggerTest", (req, res) => {

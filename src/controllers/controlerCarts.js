@@ -49,8 +49,7 @@ export const createProductInCart = async (req, res) => {
     try {
         const cID = req.params.cid;
         const pID = req.params.pid;
-        const productToCart = await cartService.addProducts(cID, pID);
-    
+
         if (req.user.role === "premium") {
           const product = await productService.getById(pID)
 
@@ -58,6 +57,8 @@ export const createProductInCart = async (req, res) => {
         return res.status(401).send("A premium user cannot add their own product to the cart.");
       }
         }
+
+        const productToCart = await cartService.addProducts(cID, pID);
 
         if (productToCart) {
           res.send("Product added to cart");

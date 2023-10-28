@@ -1,0 +1,13 @@
+<h1>Usuario: </h1>
+
+<div>
+      <li>Nombre: {{usuario.first_name}}</li>
+      <li>Correo Electronico: {{usuario.email}}</li>
+      <li>Edad: {{usuario.age}} años</li>
+      <li>Rol: {{usuario.userRole}}</li>
+</div>
+
+ <button type="submit" class="BotonDelete" data-id={{usuario._id}}>Eliminar usuario</button>
+ <button type="submit" class="BotonRol" data-id={{usuario._id}}>Cambiar rol del usuario</button>
+
+<script src="/js/userID.js"></script>

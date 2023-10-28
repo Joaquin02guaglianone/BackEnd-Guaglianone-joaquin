@@ -29,7 +29,6 @@ const prodSchema = new mongoose.Schema({
    code : {
     type: Number,
     required: true,
-    unique: true
    },
 
    stock : {

@@ -1,12 +1,25 @@
 
 <h1>{{title}}</h1>
 
-<div> {{productoEncontrado}}
-    {{this.title}}
-    {{this.thumbnail}}
-    {{this.price}}
-    {{this.category}}
-    {{this.stock}}
-    {{this.code}}
-    <button>Agregar al carrito</button>
+<div>
+  {{user.name}}
+  <br>
+  {{user.userRole}}
+  <br>
+  <a href="/"><button>Ver mas</button></a>
 </div>
+
+<div> 
+    {{productoEncontrado.title}}
+    {{productoEncontrado.thumbnail}}
+    {{productoEncontrado.price}}
+    {{productoEncontrado.category}}
+    {{productoEncontrado.stock}}
+    {{productoEncontrado.code}}
+    <br>
+    <button class="AddProd", data-product-id="{{productoEncontrado._id}}" data-cart-id="{{user.cart}}">Agregar al carrito</button>
+    <br>
+    <a href="/products"><button>volver atras</button></a>
+</div>
+
+<script src="/js/productId.js"></script>

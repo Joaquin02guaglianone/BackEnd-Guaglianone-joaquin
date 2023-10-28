@@ -7,16 +7,17 @@ class CartManagerDao {
 
   async addcart() {
     try {
-      const newProductCart = await this.cartModel.create({products : []})
-      return newProductCart;
+       const cart = {products : []}
+      const newCart = await this.cartModel.create(cart)
+      return newCart;
     } catch (error) {
-      console.log("error al crear el carrito");
+      console.log(error);
     }
   }
 
   async getCartId(id) {
     try {
-      const cartId = await this.cartModel.findById(id);
+      const cartId = await this.cartModel.findById(id).lean();
       if (!cartId) {
         return "No se encontro el carrito";
       }
@@ -41,14 +42,15 @@ class CartManagerDao {
       if (!cart) {
         throw new Error("Cart not found");
       }
-      const existingProductIndex = cart.products.findIndex(prod => prod.product.valueOf() === prodId);
-      console.log(existingProductIndex)
-      if (existingProductIndex !== -1) {
-        cart.products.quantity++;
+  
+      const existingProduct = cart.products.find(prod => prod.product.toString() === prodId);
+      if (existingProduct) {
+        existingProduct.quantity++;
       } else {
         const newProduct = { product: prodId, quantity: 1 };
         cart.products.push(newProduct);
       }
+  
       await cart.save();
       return true;
     } catch (error) {

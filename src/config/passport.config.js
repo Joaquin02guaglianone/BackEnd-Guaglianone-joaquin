@@ -6,6 +6,7 @@ import userModel from "../dao/models/users.js";
 import { createHash, IsValidPassword } from "../util.js";
 import GitHubStrategy from "passport-github2";
 import userDto from "../dto/userDto.js";
+import { CartService } from "../services/serviceCarts.js";
 
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
@@ -14,6 +15,8 @@ const ExtractJWT = jwt.ExtractJwt;
 const PRIVATE_KEY = "CoderKeyFeliz";
 
 export const generateToken = user => token.sign({ user }, PRIVATE_KEY, { expiresIn: '1d' })
+
+const ServiceCart = new CartService()
 
 const initializePassport = () => {
   passport.use(
@@ -36,6 +39,8 @@ const initializePassport = () => {
             role = "admin";
           }
 
+          let userCart = await ServiceCart.create()
+
           const newUser = {
             first_name,
             last_name,
@@ -43,6 +48,7 @@ const initializePassport = () => {
             age,
             password: createHash(password),
             userRole: role,
+            cart: userCart,
           };
           user = await userModel.create(newUser);
           return done(null, user);
@@ -62,6 +68,7 @@ const initializePassport = () => {
         if (!IsValidPassword(user, password)) return done(null, false);
         const { password: pass, ...userNoPass} = user._doc;
         const jwt = generateToken(userNoPass);
+        await user.updateOne({ last_connection: new Date() });
         return done(null, userNoPass);
     } catch (error) {
         return done({ message: "Error logging in" });
@@ -136,5 +143,6 @@ export const cookieExtractor = (req) => {
 
 
 
-export default initializePassport;
 
+
+export default initializePassport;

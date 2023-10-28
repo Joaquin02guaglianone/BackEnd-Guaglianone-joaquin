@@ -1,9 +1,13 @@
+import nodemailer from "nodemailer";
 import Ticketmodel from "../models/ticket.js";
 import { productManagerDao } from "./productManagerDao.js";
 import { CartManagerDao } from "./cartManagerDao.js";
+import emailEnv from "../../MaillingConfig.js";
 
 const productDao = new productManagerDao()
 const cartDao = new CartManagerDao()
+
+const transport = nodemailer.createTransport(emailEnv.mailing);
 
 
 export class TicketManagerDao {
@@ -48,7 +52,16 @@ export class TicketManagerDao {
            const newTicket = await this.Tmodel.create(ticketBody)
            const emptyCart = await cartDao.deleteCartId(cartID)
 
-           return (newTicket);
+           transport.sendMail({
+            from: `Gaming Center <${emailEnv.mailing.auth.user}>`,
+            to: email,
+            subject: "Compra completada",
+            html: `<h1> tu compra ha sido procesada sin problemas </h1>
+                              <p> este es su ticket de compra </p>
+                              <p> ${newTicket}</p>`,
+          });
+
+           return (newTicket, emptyCart);
            
         } catch (error) {
             throw new Error (error.message)

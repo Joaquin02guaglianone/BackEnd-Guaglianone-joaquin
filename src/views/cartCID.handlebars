@@ -1,6 +1,17 @@
 
 <h1>{{title}}</h1>
 
-<div> {{carritoEncontrado}}
-{{this.product}}
-</div>
+<div> {{#each carritoEncontrado}}
+    <p>nombre: {{this.product.title}}</p>
+    <p>precio: ${{this.product.price}}</p>
+    <p>descripcion del articulo: {{this.product.description}}</p>
+    <p>stock del producto: {{this.product.stock}}</p>
+    <p>categorias: {{this.product.category}}</p>
+    <p>cantidad de copias:{{this.quantity}}</p>
+    <hr>
+</div>{{/each}}
+
+<button type="submit" class="comprar" data-id={{carritoEncontrado._id}}>completar compra</button>
+
+<script src="/js/compra.js"></script>
+
