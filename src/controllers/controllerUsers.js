@@ -1,20 +1,10 @@
 import userModel from "../dao/models/users.js";
-import userDto from "../dto/userDto.js";
 
 export const AllUsers = async (req,res) => {
     try {
-      const Users = await userModel.find();
-  
-      const filteredUserData = [];
-  
-      for (const user of Users) {
-  
-        const userDataDto = new userDto(user)
-        filteredUserData.push(userDataDto);
-      }
-  
-      console.log(filteredUserData)
-      res.status(200).json(filteredUserData)
+      const Users = await userModel.find().lean();
+
+     return Users; 
     } catch (error) {
       console.error(error)
       throw new Error("No se logro traer a todos los usuarios");

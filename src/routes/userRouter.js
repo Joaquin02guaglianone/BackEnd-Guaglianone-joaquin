@@ -68,7 +68,10 @@ routerUser.post('/login', passport.authenticate('login', { failureRedirect: '/ap
     res.cookie('coderCookieToken', token, { httpOnly: true }).send({ status: "success", payload: req.session.user, message: "¡Primer logueo realizado! :)" });
 });
 
+
+
 routerUser.post("/premium/:uid", changeUserRole)
+
 
 routerUser.post('/restore-pass/:token', validarToken, restorePass);
 

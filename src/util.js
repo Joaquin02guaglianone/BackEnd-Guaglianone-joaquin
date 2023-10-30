@@ -34,7 +34,7 @@ export const authToken = (role) => {
                 }
             }
             next();
-        })
+         })
 }}
 
 export const generateMocks = () => {

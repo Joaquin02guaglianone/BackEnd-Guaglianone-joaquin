@@ -1,0 +1,23 @@
+<h2>Usuario:</h2>
+
+<div>
+  {{user.name}}
+  <br>
+  {{user.userRole}}
+  <br>
+  <a href="/"><button>Ver mas</button></a>
+  <br>
+</div>
+
+<h2>Todos los Usuarios:</h2>
+
+<div>
+  <div>{{#each usuarios}}
+    {{this._id}}
+{{this.email}}
+{{this.userRole}}
+{{this.documents}}
+<a href="/users/{{this._id}}"><button>ver detalles del usuario</button></a>
+<br>
+  </div>{{/each}}
+</div>

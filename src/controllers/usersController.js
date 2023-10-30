@@ -39,6 +39,7 @@ const createJwt = (email) => {
   }, PRIVATE_KEY, {
     expiresIn: "1h"
   });
+
 };
 
 export const restorePass = async (req, res) => {

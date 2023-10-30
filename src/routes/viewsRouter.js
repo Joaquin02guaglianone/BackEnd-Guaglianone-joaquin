@@ -3,8 +3,8 @@ import {Product} from "../ProductManager.js";
 import { productManagerDao } from "../dao/ManagersDao/productManagerDao.js";
 import { CartManagerDao } from "../dao/ManagersDao/cartManagerDao.js";
 import MessageManagerMdb from "../dao/ManagersDao/messagesManagerDao.js";
-import { validarToken } from "../util.js";
-import { userById } from "../controllers/controllerUsers.js";
+import { authToken, validarToken } from "../util.js";
+import { AllUsers, userById } from "../controllers/controllerUsers.js";
 
 export const routerView = Router()
 
@@ -68,16 +68,16 @@ routerView.get("/products/:pid", privateAccess, async (req,res) => {
   }
 })
 
-routerView.get("/cart/:cid", async (req,res) => {
+routerView.get("/cart/:cid", privateAccess, async (req,res) => {
   try {
 const Cartid = (req.params.cid)
 
 let carritoIdentificado = await cart.getCartId(Cartid)
 
-
 res.render("cartCID", {
   title: "Bienvenido a Gaming Center",
-  carritoEncontrado : carritoIdentificado
+  carritoEncontrado : carritoIdentificado,
+  user : req.session.user
 })
   } catch (error) {
     throw new Error ("ocurrio un error en el servidor")
@@ -115,7 +115,20 @@ routerView.get("/", privateAccess, (req, res) => {
   })
 })
 
-routerView.get("/users/:userid", async (req,res) => {
+routerView.get("/users/", authToken(["admin"]) , async (req,res) => {
+  try {
+    const userId = (req.params.userid)
+
+    let usersFound = await AllUsers(userId)
+
+    res.render("usuarios", { usuarios: usersFound })
+
+  } catch (error) {
+    res.status(500).send("Internal server error");
+  }
+})
+
+routerView.get("/users/:userid",authToken(["admin"]), async (req,res) => {
   try {
     const userId = (req.params.userid)
 
