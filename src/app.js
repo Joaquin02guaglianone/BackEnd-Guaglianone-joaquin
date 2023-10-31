@@ -19,6 +19,7 @@ import routerUser from "./routes/userRouter.js";
 import initializePassport from "./config/passport.config.js";
 import { addLogger, loggerInfo } from "./logger/logger.js";
 
+
 dotenv.config();
 
 const app = express();
