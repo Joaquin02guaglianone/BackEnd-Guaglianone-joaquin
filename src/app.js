@@ -73,9 +73,9 @@ app.use(
       ttl: 3600,
     }),
 
-    secret: " coderhouse ",
-    resave: " false ",
-    saveUninitialize: " false ",
+    secret: 'coderhouse',
+    resave: false,
+    saveUninitialize: false,
   })
 );
 
