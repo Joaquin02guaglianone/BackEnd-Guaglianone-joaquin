@@ -25,10 +25,12 @@ dotenv.config();
 const app = express();
 app.use(addLogger);
 
-const serverHttp = app.listen(process.env.ServerPort, () => {
+const PORT = process.env.PORT || 8080;
+
+const serverHttp = app.listen(PORT, () => {
   const info = loggerInfo();
   info.info(
-    `The server is working correctly on the port ${process.env.ServerPort}`
+    `The server is working correctly on the port ${PORT}`
   );
 });
 
@@ -73,9 +75,9 @@ app.use(
       ttl: 3600,
     }),
 
-    secret: " coderhouse ",
-    resave: " false ",
-    saveUninitialize: " false ",
+    secret: 'coderhouse',
+    resave: false,
+    saveUninitialized: true,
   })
 );
 
