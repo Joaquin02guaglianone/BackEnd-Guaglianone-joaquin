@@ -75,7 +75,7 @@ app.use(
 
     secret: 'coderhouse',
     resave: false,
-    saveUninitialize: false,
+    saveUninitialized : false,
   })
 );
 
